@@ -3,6 +3,9 @@
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
 
+# Thanks to CarLoid
+He helped me a lot to understand further on how the god hand file system works, me and him got our brains to work on how the files storage their data to bring im the pack.
+
 
 # DAT Extractor
 
