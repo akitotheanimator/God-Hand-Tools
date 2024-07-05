@@ -6,6 +6,6 @@ I will update the tools from the old pack.
 
 # DAT Extractor
 
-Works like the old one, but BETTER, this one has a more robust code and supports both model packed files and map packed files.
+Works like the classic one, but BETTER, it reads all the contents of the god hand packed data (.dat) and extract all of the contents in there. This one has a more robust code and supports both model packed files and map packed files.
 Now you can just drag the folders that you want to be readen on and the program will automatically look through all the subdirectories of it and read each dat that contains in there.
 Or, you can simply drag and drog all the dat files on the .exe and it will be processed automatically
