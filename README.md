@@ -73,8 +73,9 @@ Which means, **in order to get each adress of each file inside the DAT file, we 
 The math to calculate the stop point(adress/offset) is quite easy.
 First, you get the number of files that the file gives on the **offset 0 of the file**.
 then, you do this operation:
-* Stop reading on offset = Starting point + (Number of files that the dat contains * 4)
-Breaking the equasion down:
-* Starting point = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
-* Number of files that the Dat contains = the number of files that the DAT containts. On the file i'm using as example, the value it was given on offset **0** after reading the **UInt32** value of it.
+* EO = SP + (NOF * 4)
+Where:
+* EO = the exact point that there's no more adresses to be readen.
+* SP = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
+* NOF = the number of files that the DAT containts. On the file i'm using as example, the value it was given on offset **0** after reading the **UInt32** value of it.
 * 4 = an UInt32 takes 4 bytes, so, in order to convert file number to UInt32 bytes, you need to multiply by 4.
