@@ -65,6 +65,7 @@ Using a simple math calculation. we've readen the first 4 bytes of the file, so 
 
 remember that number i told to remember? we're going to use it to determinate the adress that the adresses stop.
 each adress of the header is **4 bytes, meant to be readen as a UInt32.**
+
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c0415533-ac96-47db-8373-6f01ae7dc2c0)
 
 which means, **in order to get each adress of each file inside the DAT file, we need to read all of the bytes as a UInt32.* In this example, the UInt32 values of the 3 adresses i selected are 4960, 154272 and 475616.
