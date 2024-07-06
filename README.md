@@ -20,7 +20,8 @@ Or, you can simply drag and drog all the dat files on the .exe and it will be pr
 
 
 
-
-.DAT
+# File Structure Docs
+# DAT
 The god hand DAT is a file that packs game assets, such as models, for example. It is pretty common to be seen when visualized on a AFS viewer.
+
 ![godo hand](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/abd327e4-d0ab-4946-a95f-fc9e2e7fed2b)
