@@ -1,4 +1,4 @@
-# God Hand Tools
+![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/b7d14244-6f85-46e0-bf10-09c5fe56d561)# God Hand Tools
 
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
@@ -41,3 +41,6 @@ pretty subtle BUT essential way to identify both. The file specifies which versi
 * DAT typ 0 is mostly used for models or such.
 
 # DAT 1.1 - TYPE 0
+Normally, files have a sequence of characters that helps to identify the file they're dealing with, for example, the MD files and SCR files from god hand have a file identifier header:
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/54a601f3-e194-4b3b-ad44-743e7cab7069)
+However, the DAT File doesn't have a identifier on the Header.
