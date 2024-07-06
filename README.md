@@ -1,4 +1,4 @@
-![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/b7d14244-6f85-46e0-bf10-09c5fe56d561)# God Hand Tools
+![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/6eebef12-521f-46f2-89fc-45a0b14e9ab4)![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/b7d14244-6f85-46e0-bf10-09c5fe56d561)# God Hand Tools
 
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
@@ -54,5 +54,7 @@ You will need to handle that kind of stuff if you're writting a god hand dat rea
 
 # DAT 1.2 - TYPE 0
 It's easy to be made sense of. The first 4 bytes are the quantity of files that the DAT containts. Should be reader as a **UInt32**.
+in this example, i will use Gene .dat file, that's named after **pl00.dat**.
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/352ed612-e356-43d9-95a4-c5237381c512)
+
 you will have to remember that **UInt32** value *soon*.
