@@ -47,6 +47,9 @@ Normally, files have a sequence of characters that helps to identify the file th
 However, DAT Files doesn't have a identifier on the Header. The game is almost entirely coded with indexing, and since this is a package file, that's *one of the cases*.
 
 in short, if you're writting a program to read dat files, **you will NOT be able to tell the real file type by string sequence.**
-if the file isn't a real dat file, i.e: a audio.mp3 that was renamed to audio.dat, the program will probably encounter errors reading the file.
+
+if the file isn't a real dat file, i.e: a audio.mp3 that was renamed to audio.dat, the program will probably encounter errors reading the file, or even crash.
+
 You will need to handle that kind of stuff if you're writting a god hand dat reader or repacker.
+
 # DAT 1.2 - TYPE 0
