@@ -37,7 +37,7 @@ On the other hand, DAT type 0 is straight forward, no blank spaces to be seen.
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c4cbb102-23e7-4bb3-9ccc-a593ee08a4d1)
 
 pretty subtle BUT essential way to identify both. The file specifies which version they are, but it's a little tricky.
-DAT type 1 is mostly used for big memory consuption that needs to be compressed, the majority of them are map files.
-DAT typ 0 is mostly used for models or such.
+* DAT type 1 is mostly used for big memory consuption that needs to be compressed, the majority of them are map files.
+* DAT typ 0 is mostly used for models or such.
 
 # DAT 1.1 - TYPE 0
