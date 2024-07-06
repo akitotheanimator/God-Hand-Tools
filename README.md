@@ -21,7 +21,7 @@ Or, you can simply drag and drog all the dat files on the .exe and it will be pr
 
 
 # File Structure Docs
-# DAT
+# DAT 1
 The god hand DAT is a file that packs game assets, such as models, for example. It is pretty common to be seen when visualized on a AFS viewer.
 
 ![godo hand](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/abd327e4-d0ab-4946-a95f-fc9e2e7fed2b)
@@ -37,3 +37,5 @@ On the other hand, Packed Data(DAT) files are straight forward, no blank spaces 
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c4cbb102-23e7-4bb3-9ccc-a593ee08a4d1)
 
 pretty subtle BUT essential way to identify both. The file specifies which version they are, but it's a little tricky.
+
+# DAT 1.1 - TYPE 0
