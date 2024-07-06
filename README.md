@@ -60,7 +60,7 @@ in this example, i will use Gene .dat file, that the name is **pl00.dat**.
 you will have to remember that **UInt32** value *soon*.
 
 And then, the next bytes are all the adresses of all files in the DAT. How to know at which point it should be readen?
-Using a simple math calculation. we've readen the first 4 bytes of the file, so that means the staring point(offset) of the file should be at offset **4**.
+Using a simple math calculation. we've readen the first 4 bytes of the file, so that means the staring point(adress/offset) of the file should be at offset **4**.
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/26c6a62d-2df1-4bf9-aaff-5632834ef446)
 
 remember that number i told to remember? we're going to use it to determinate the adress that the adresses stop.
@@ -68,4 +68,13 @@ each adress of the header is **4 bytes, meant to be readen as a UInt32.**
 
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c0415533-ac96-47db-8373-6f01ae7dc2c0)
 
-which means, **in order to get each adress of each file inside the DAT file, we need to read all of the bytes as a UInt32.* In this example, the UInt32 values of the 3 adresses i selected are 4960, 154272 and 475616.
+Which means, **in order to get each adress of each file inside the DAT file, we need to read all of the bytes as a UInt32.** In this example, the UInt32 values of the 3 adresses i selected are 4960, 154272 and 475616.
+
+The math to calculate the stop point(adress/offset) is quite easy.
+First, you get the number of files that the file gives on the **offset 0 of the file**.
+then, you do this operation:
+* Stop reading on offset = Starting point + (Number of files that the dat contains * 4)
+Breaking the equasion down:
+* Starting point = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
+* Number of files that the Dat contains = the number of files that the DAT containts. On the file i'm using as example, the value it was given on offset **0** after reading the **UInt32** value of it.
+* 4 = an UInt32 takes 4 bytes, so, in order to convert file number to UInt32 bytes, you need to multiply by 4.
