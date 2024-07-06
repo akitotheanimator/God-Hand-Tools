@@ -1,4 +1,4 @@
-# God Hand Tools
+![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/1298771c-0285-4bc4-ab8c-86622978501c)# God Hand Tools
 
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
@@ -83,3 +83,11 @@ Where:
 * 4 = an UInt32 takes 4 bytes, so, in order to convert file number to UInt32 bytes, you need to multiply by 4.
 
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/a49c0a6c-82da-470b-83eb-b81df7545447)
+
+This is all the file offsets.
+
+Now, how to retrieve the File type of each adress.
+In pl00.dat, has returned a EO of 2476. So, next step is to go in that adress...
+![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/45c698d2-3e91-479f-b3ec-b0f675d3af3a)
+
+There's a Area of the DAT that's covered with file types. Seq, Mot, Tm3 and etc. Let's pay closer attention to the duration of this string area.
