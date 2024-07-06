@@ -54,7 +54,17 @@ You will need to handle that kind of stuff if you're writting a god hand dat rea
 
 # DAT 1.2 - TYPE 0
 It's easy to be made sense of. The first 4 bytes are the quantity of files that the DAT containts. Should be reader as a **UInt32**.
-in this example, i will use Gene .dat file, that's named after **pl00.dat**.
+in this example, i will use Gene .dat file, that the name is **pl00.dat**.
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/352ed612-e356-43d9-95a4-c5237381c512)
 
 you will have to remember that **UInt32** value *soon*.
+
+And then, the next bytes are all the adresses of all files in the DAT. How to know at which point it should be readen?
+Using a simple math calculation. we've readen the first 4 bytes of the file, so that means the staring point(offset) of the file should be at offset **4**.
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/26c6a62d-2df1-4bf9-aaff-5632834ef446)
+
+remember that number i told to remember? we're going to use it to determinate the adress that the adresses stop.
+each adress of the header is **4 bytes, meant to be readen as a UInt32.**
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c0415533-ac96-47db-8373-6f01ae7dc2c0)
+
+which means, **in order to get each adress of each file inside the DAT file, we need to read all of the bytes as a UInt32.* In this example, the UInt32 values of the 3 adresses i selected are 4960, 154272 and 475616.
