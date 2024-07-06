@@ -1,4 +1,4 @@
-![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/6eebef12-521f-46f2-89fc-45a0b14e9ab4)![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/b7d14244-6f85-46e0-bf10-09c5fe56d561)# God Hand Tools
+# God Hand Tools
 
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
@@ -75,7 +75,7 @@ First, you get the number of files that the file gives on the **offset 0 of the 
 then, you do this operation:
 
 * EO = SP + (NOF * 4)
-* 
+  
 Where:
 * EO = the exact point that there's no more adresses to be readen.
 * SP = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
