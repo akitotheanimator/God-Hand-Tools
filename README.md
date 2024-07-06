@@ -81,3 +81,5 @@ Where:
 * SP = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
 * NOF = the number of files that the DAT containts. On the file i'm using as example, the value it was given on offset **0** after reading the **UInt32** value of it.
 * 4 = an UInt32 takes 4 bytes, so, in order to convert file number to UInt32 bytes, you need to multiply by 4.
+
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/a49c0a6c-82da-470b-83eb-b81df7545447)
