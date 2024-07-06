@@ -44,6 +44,9 @@ pretty subtle BUT essential way to identify both. The file specifies which versi
 I have to talk about this.
 Normally, files have a sequence of characters that helps to identify the file they're dealing with, for example, the MD files and SCR files from god hand have a file identifier header:
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/54a601f3-e194-4b3b-ad44-743e7cab7069)
-However, DAT Files doesn't have a identifier on the Header. The game is almost entirely coded with indexing, and since this is a package file, that's *one of the cases*
-in short, if you're writting a program to read dat files, **you will NOT be able to tell the real file type by string sequence.** if the file isn't a real dat file, i.e: a audio.mp3 that was renamed to audio.dat, the program will probably encounter errors, you will need to handle that kind of stuff if you're writting a god hand dat reader or repacker.
+However, DAT Files doesn't have a identifier on the Header. The game is almost entirely coded with indexing, and since this is a package file, that's *one of the cases*.
+
+in short, if you're writting a program to read dat files, **you will NOT be able to tell the real file type by string sequence.**
+if the file isn't a real dat file, i.e: a audio.mp3 that was renamed to audio.dat, the program will probably encounter errors reading the file.
+You will need to handle that kind of stuff if you're writting a god hand dat reader or repacker.
 # DAT 1.2 - TYPE 0
