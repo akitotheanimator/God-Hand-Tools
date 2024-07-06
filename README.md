@@ -25,3 +25,9 @@ Or, you can simply drag and drog all the dat files on the .exe and it will be pr
 The god hand DAT is a file that packs game assets, such as models, for example. It is pretty common to be seen when visualized on a AFS viewer.
 
 ![godo hand](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/abd327e4-d0ab-4946-a95f-fc9e2e7fed2b)
+
+There is two main DAT types that can be seen on GOD HAND: UPD and DAT(i made up those names since i haven't saw anybody to come up with a name for them.)
+There's a subtle way to identify both, they have a difference that's crucial to diferentiate them two.
+
+Ultra Packed Data(UPD) gives some bytes, before filling a enormous space with *blank bytes* , as you can see, it covers a very generous of the DAT, going from offset 304 to offset 512.
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/7662fd94-099e-4d0e-b0ed-8a1f4ff3bd0d)
