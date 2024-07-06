@@ -73,7 +73,9 @@ Which means, **in order to get each adress of each file inside the DAT file, we 
 The math to calculate the stop point(adress/offset) is quite easy.
 First, you get the number of files that the file gives on the **offset 0 of the file**.
 then, you do this operation:
+
 * EO = SP + (NOF * 4)
+* 
 Where:
 * EO = the exact point that there's no more adresses to be readen.
 * SP = the adress that the first adress is located. On the file i'm using as example, the offset is equal **4**.
