@@ -29,5 +29,11 @@ The god hand DAT is a file that packs game assets, such as models, for example. 
 There is two main DAT types that can be seen on GOD HAND: UPD and DAT(i made up those names since i haven't saw anybody to come up with a name for them.)
 There's a subtle way to identify both, they have a difference that's crucial to diferentiate them two.
 
-Ultra Packed Data(UPD) gives some bytes, before filling a enormous space with *blank bytes* , as you can see, it covers a very generous of the DAT, going from offset 304 to offset 512.
+Ultra Packed Data(UPD) gives some bytes, before filling a enormous space with *blank bytes*.
 ![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/7662fd94-099e-4d0e-b0ed-8a1f4ff3bd0d)
+As you can see, the *blank bytes* covers a very generous portion of the DAT, going from offset 304 to offset 512.
+
+On the other hand, Packed Data(DAT) files are straight forward, no blank spaces to be seen.
+![types](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/c4cbb102-23e7-4bb3-9ccc-a593ee08a4d1)
+
+pretty subtle BUT essential way to identify both. The file specifies which version they are, but it's a little tricky.
