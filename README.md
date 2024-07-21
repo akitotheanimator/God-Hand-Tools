@@ -1,4 +1,4 @@
-![image](https://github.com/akitotheanimator/God-Hand-Tools/assets/174764120/1298771c-0285-4bc4-ab8c-86622978501c)# God Hand Tools
+# God Hand Tools
 
 I have lost acess to my old account so i made a new one.
 I will update the tools from the old pack.
