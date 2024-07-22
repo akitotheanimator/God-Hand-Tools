@@ -1,0 +1,17 @@
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.csproj.AssemblyReference.cache
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.AssemblyInfoInputs.cache
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.AssemblyInfo.cs
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.csproj.CoreCompileInputs.cache
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\MOTool.exe
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\MOTool.deps.json
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\MOTool.runtimeconfig.json
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\MOTool.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\MOTool.pdb
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Release\net8.0\SharpGL.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.csproj.Up2Date
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\refint\MOTool.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.pdb
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\MOTool.genruntimeconfig.cache
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Release\net8.0\ref\MOTool.dll
