@@ -6,7 +6,10 @@ I will update the tools from the old pack.
 # Thanks to CarLoiD and Kerilk
 Carloid helped me a lot to understand further on how the god hand file system works, me and him got our brains to work on how the files storage their data to bring im the pack.
 **CarLoid's github page: https://github.com/CarLoiD**
-And Kerilk, Shotouts to this mad lad who documented the whole MOT documentation for the public. Thank you a lot!
+
+And huge thanks to Kerilk, Shotouts to this mad lad who documented the whole MOT documentation for the public. Thank you a lot!
+
+
 **Kerilk's github page: https://github.com/Kerilk**
 **in case you're wondering, here's the MOT documentation: https://github.com/Kerilk/bayonetta_tools/wiki/Motion-Formats-%28mot-files%29**
 
