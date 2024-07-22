@@ -16,7 +16,8 @@ Or, you can simply drag and drog all the dat files on the .exe and it will be pr
 # MdtoSmd2.0
 
 Like the old one, it converts god hand .md models to valve smd. It has new features, like saving the bones as a .bones file. you will need this tool in order to use MOTool.
-It have a map model support but it's very W.I.P. i don't recomend trying to use it on maps.
+It have a map model support but it's very W.I.P. i don't recomend trying to use it on map models.
+
 ![godo](https://github.com/user-attachments/assets/cdf22492-cbc3-4f20-a309-c0eb025a6a8b)
 
 
