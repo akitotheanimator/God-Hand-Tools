@@ -11,6 +11,7 @@ And huge thanks to Kerilk, Shotouts to this mad lad who documented the whole MOT
 
 
 **Kerilk's github page: https://github.com/Kerilk**
+
 **in case you're wondering, here's the MOT documentation: https://github.com/Kerilk/bayonetta_tools/wiki/Motion-Formats-%28mot-files%29**
 
 # DAT Extractor
