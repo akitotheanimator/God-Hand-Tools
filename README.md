@@ -11,7 +11,15 @@ He helped me a lot to understand further on how the god hand file system works, 
 
 Works like the classic one, but BETTER, it reads all the contents of the god hand packed data (.dat) and extract all of the contents in there. This one has a more robust code and supports both GPF(Generic packed files) and MPF(Mega package file).
 Now you can just drag the folders that you want to be readen on and the program will automatically look through all the subdirectories of it and read each dat that contains in there.
-Or, you can simply drag and drog all the dat files on the .exe and it will be processed automatically
+Or, you can simply drag and drog all the dat files on the .exe and it will be processed automatically.
+
+# MdtoSmd2.0
+
+Like the old one, it converts god hand .md models to valve smd. It has new features, like saving the bones as a .bones file. you will need this tool in order to use MOTool.
+It have a map model support but it's very W.I.P. i don't recomend trying to use it on maps.
+![godo](https://github.com/user-attachments/assets/cdf22492-cbc3-4f20-a309-c0eb025a6a8b)
+
+
 
 # MOTool
 MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD. You will need a .bones file to convert the files correctly, which i have implemented on the brand new version of MdtoSmd.
