@@ -14,7 +14,7 @@ Now you can just drag the folders that you want to be readen on and the program 
 Or, you can simply drag and drog all the dat files on the .exe and it will be processed automatically
 
 # MOTool
-MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD. You will need a .bones file to convert the files correctly. and it still WIP and BETA.
+MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD. You will need a .bones file to convert the files correctly, which i have implemented on the brand new version of MdtoSmd.
 This wouldn't be possible without KERILK. https://github.com/Kerilk shotouts to this mad lad who documented the whole MOT documentation for the public. Thank you a lot!
 in case you're wondering, here's the MOT documentation: https://github.com/Kerilk/bayonetta_tools/wiki/Motion-Formats-%28mot-files%29
 Obviously the God Hand MOT is much diferent than the one in bayonetta or nieR, but the value reading & parsing follows the same system.
