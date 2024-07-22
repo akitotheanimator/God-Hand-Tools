@@ -1,7 +1,7 @@
 # God Hand Tools
 
 I have lost acess to my old account so i made a new one.
-I will update the tools from the old pack.
+God Hand Tools's purpose is to bring people packs of tools to convert god hand files to more flexible and modern ones.
 
 # Thanks to CarLoiD and Kerilk
 Carloid helped me a lot to understand further on how the god hand file system works, me and him got our brains to work on how the files storage their data to bring im the pack.
