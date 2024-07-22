@@ -6,6 +6,7 @@ I will update the tools from the old pack.
 # Thanks to CarLoiD and Kerilk
 Carloid helped me a lot to understand further on how the god hand file system works, me and him got our brains to work on how the files storage their data to bring im the pack.
 And Kerilk, Shotouts to this mad lad who documented the whole MOT documentation for the public. Thank you a lot!
+**Kerilk's github page: https://github.com/Kerilk**
 **in case you're wondering, here's the MOT documentation: https://github.com/Kerilk/bayonetta_tools/wiki/Motion-Formats-%28mot-files%29**
 
 # DAT Extractor
@@ -26,7 +27,6 @@ It have a map model support but **it's very W.I.P. i don't recomend trying to us
 
 # MOTool
 MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD. You will need a .bones file to convert the files correctly, which i have implemented on the brand new version of MdtoSmd.
-**This wouldn't be possible without KERILK. https://github.com/Kerilk**
 ![ezgif-1-5676d2ae5a](https://github.com/user-attachments/assets/d4294290-a0af-49c9-9fd6-1f06f7bd6b9b)
 
 
