@@ -127,6 +127,15 @@ public static class MOTFile
         }
         return ind.ToArray();
     }
+    public static bool isIK(int[] re)
+    {
+        bool ret = false;
+        for (int i = 0; i < re.Length; i++)
+            if (MOTFile.bones[re[i]].data.isAbsoluteCoordinate)
+                ret = true;
+
+        return ret;
+    }
     public static void addCurve(MOTKeyframe c, MOTHeader k)
     {
         if (k.curves != null)

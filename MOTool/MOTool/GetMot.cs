@@ -56,7 +56,6 @@ public static class GetMot
         GlobalTools.changeColor(ConsoleColor.Green);
         Console.WriteLine("This is a valid MOT File!");
         GlobalTools.changeColor(ConsoleColor.Yellow);
-        Thread.Sleep(100);
         Console.WriteLine("Reading Header");
 
         using (FileStream fs = new FileStream(file, FileMode.Open))
@@ -104,7 +103,6 @@ public static class GetMot
                         Console.WriteLine($"Bone index: {bone.index}   (Keyframe Type: {bone.type}, Total Keyframes on property: {keyframe.keyframeCount} MV{keyframe.isAbsoluteCoordinate}, localized at: 0x{keyframe.adress.ToString("X")} ({tempCount}))");
                     tempCount += 1;
 
-                    Thread.Sleep(15);
                     //Console.WriteLine(i);
                     #endregion
                 }
@@ -168,32 +166,6 @@ public static class GetMot
         MOTFile.Quantize();
         GlobalTools.changeColor(ConsoleColor.Green);
         Console.WriteLine("Done!");
-
-
-
-
-
-
-        //Application.EnableVisualStyles();
-        //Application.SetCompatibleTextRenderingDefault(false);
-
-
-        //var plotView = new PlotView
-        //{
-        //    Model = Program.plotModel,
-        //     Dock = DockStyle.Fill
-        //};
-        //var form = new Form
-        //{
-        //    Text = file,
-        //    Width = 1280,
-        //    Height = 720
-        //};
-        //plotView.Name = Path.GetFileNameWithoutExtension(file);
-        //
-        //form.Controls.Add(plotView);
-        // Application.Run(form);
-
         SMDExportMOT.Export(file);
     }
 }

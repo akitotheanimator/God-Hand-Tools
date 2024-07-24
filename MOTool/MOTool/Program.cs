@@ -10,7 +10,7 @@ public static class Program
 {
     public static string pathForBones;
     public static string saveFileTo;
-    public static int ETA=0;
+    public static int ETA = 0;
     public static void Main(string[] args)
     {
 
@@ -60,24 +60,23 @@ public static class Program
                     GlobalTools.changeColor(ConsoleColor.Green);
                     Console.WriteLine("Drag and drop the bones file of the model in this field.");
                     pathForBones = Console.ReadLine().Replace("\"", "").Replace("\n", "");
-                } else
-                {
-                    pathForBones = bonesFile[0];
                 }
-                if (bonesFile.Length == 0)
+                else
                 {
-                    GlobalTools.changeColor(ConsoleColor.Red);
-                    Console.WriteLine("There's no .bones file at the given directory. Please, place the model .bones file to proceed.");
+                    if (bonesFile.Length > 0)
+                        pathForBones = bonesFile[0];
+                    else
+                    {
+                        GlobalTools.changeColor(ConsoleColor.Red);
+                        Console.WriteLine("There's no .bones file at the given directory. Please, place the model .bones file to proceed.");
 
 
-                    GlobalTools.changeColor(ConsoleColor.Green);
-                    Console.WriteLine("Drag and drop the bones file of the model in this field.");
-                    pathForBones = Console.ReadLine().Replace("\"", "").Replace("\n", "");
+                        GlobalTools.changeColor(ConsoleColor.Green);
+                        Console.WriteLine("Drag and drop the bones file of the model in this field.");
+                        pathForBones = Console.ReadLine().Replace("\"", "").Replace("\n", "");
+                    }
                 }
-
-
-
-                    for (int i = 0; i < motFiles.Length; i++)
+                for (int i = 0; i < motFiles.Length; i++)
                 {
                     if (File.Exists(motFiles[i]))
                     {

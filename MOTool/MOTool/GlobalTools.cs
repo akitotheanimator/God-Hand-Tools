@@ -120,39 +120,25 @@ public static class GlobalTools
 
 public class IEEEBinary16
 {
-    private const int SignificandBits = 9;
-    private const int ExponentBits = 6;
-    private const int Bias = 47;
-
-    // Method to convert from bytes to float (IEEE binary16)
     public static float FromBytes(byte[] bytes, bool bigEndian = false)
     {
         if (bytes.Length != 2)
             throw new ArgumentException("Byte array must be of length 2.");
-
-        // Determine byte order
         if (bigEndian)
             Array.Reverse(bytes);
 
         ushort halfPrecision = BitConverter.ToUInt16(bytes, 0);
 
-        int exponent = (halfPrecision >> SignificandBits) & ((1 << ExponentBits) - 1);
-        int significand = halfPrecision & ((1 << SignificandBits) - 1);
+        int exponent = (halfPrecision >> 9) & ((1 << 6) - 1);
+        int significand = halfPrecision & ((1 << 9) - 1);
         int sign = (halfPrecision >> 15) & 1;
-
-        // Handle special cases for NaN and Infinity if needed
-
-        // Convert to float
-        int biasedExponent = exponent - Bias;
-        float value = (float)((sign * -2 + 1) * Math.Pow(2, biasedExponent) * (1 + significand / Math.Pow(2, SignificandBits)));
+        int biasedExponent = exponent - 47;
+        float value = (float)((sign * -2 + 1) * Math.Pow(2, biasedExponent) * (1 + significand / Math.Pow(2, 9)));
 
         return value;
     }
-
-    // Method to convert from float to bytes (IEEE binary16)
     public static byte[] ToBytes(float value, bool bigEndian = false)
     {
-        // Convert float to IEEE binary16
         ushort halfPrecision = 0;
         int sign = value < 0 ? 1 : 0;
         value = Math.Abs(value);
@@ -161,17 +147,12 @@ public class IEEEBinary16
             throw new ArgumentException("Value cannot be NaN or Infinity.");
 
         int exponent = (int)Math.Floor(Math.Log(value) / Math.Log(2));
-        int significand = (int)Math.Round(value / Math.Pow(2, exponent) * (1 << SignificandBits));
-
-        // Adjust exponent and significand for half precision
-        int biasedExponent = exponent + Bias;
+        int significand = (int)Math.Round(value / Math.Pow(2, exponent) * (1 << 9));
+        int biasedExponent = exponent + 47;
         halfPrecision |= (ushort)(sign << 15);
-        halfPrecision |= (ushort)((biasedExponent << SignificandBits) & 0x7FF);
-        halfPrecision |= (ushort)(significand & ((1 << SignificandBits) - 1));
-
+        halfPrecision |= (ushort)((biasedExponent << 9) & 0x7FF);
+        halfPrecision |= (ushort)(significand & ((1 << 9) - 1));
         byte[] bytes = BitConverter.GetBytes(halfPrecision);
-
-        // Determine byte order
         if (bigEndian)
             Array.Reverse(bytes);
 
