@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using static FILE_MANAGING.FILE_SYSTEM;
-using static MD.SCR;
 
 public static class Proceed
 {
@@ -24,7 +23,7 @@ public static class Proceed
                 writer.Dispose();
             }
 
-            ((int, string)[], string, int) tempMemory = getDATInfo(arg);
+            ((uint, string)[], string, uint) tempMemory = getDATInfo(arg);
             for (int i = 0; i < tempMemory.Item1.Length; i++)
             {
                 Directory.CreateDirectory(rootFolder + "/" + (tempMemory.Item1[i].Item2.Replace("\0","")) + "/");
@@ -35,7 +34,7 @@ public static class Proceed
                 {
                     using (FileStream fs = new FileStream(selectedFolder + tempMemory.Item1[i].Item2.Replace("\0", "") + i + "." + tempMemory.Item1[i].Item2.Replace("\0", "").ToLower(), FileMode.Create))
                     {
-                        for (int off = tempMemory.Item1[i].Item1; off < tempMemory.Item1[i + 1].Item1; off++)
+                        for (uint off = tempMemory.Item1[i].Item1; off < tempMemory.Item1[i + 1].Item1; off++)
                         {
                             fs.WriteByte(file[off]);
                         }
@@ -45,7 +44,7 @@ public static class Proceed
                 {
                     using (FileStream fs = new FileStream(selectedFolder + tempMemory.Item1[i].Item2.Replace("\0", "") + i + "." + tempMemory.Item1[i].Item2.Replace("\0", "").ToLower(), FileMode.Create))
                     {
-                        for (int off = tempMemory.Item1[i].Item1; off < file.Length; off++)
+                        for (uint off = tempMemory.Item1[i].Item1; off < file.Length; off++)
                         {
                             fs.WriteByte(file[off]);
                         }

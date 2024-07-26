@@ -2,75 +2,74 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using static IOH.IOHelper;
 
 namespace FILE_MANAGING
 {
     public static class FILE_SYSTEM
     {
-        public static ((int, string)[], string,int) getDATInfo(string path)
+        public static ((uint, string)[], string, uint) getDATInfo(string path)
         {
             string type = "NONE";
-            int startOffset = 0;
-            (int, string)[] adresses = new(int,string)[0];
-
-
+            uint startOffset = 0;
+            (uint, string)[] adresses = new (uint, string)[0];
             using (FileStream fs = new FileStream(path, FileMode.Open))
             using (BinaryReader br = new BinaryReader(fs))
             {
-                fs.Position = 4;
-                fs.Position = br.ReadInt32();
-                if (br.ReadInt32() != 0)
+                if (readValue(fs, br, readValue(fs, br, 4, NumberType.UINT), NumberType.UINT) != 0)
                 {
                     type = "PACKED_MODEL";
                 }
-                if (br.ReadInt32() == 0)
+                if (readValue(fs, br, readValue(fs, br, 4, NumberType.UINT), NumberType.UINT) == 0)
                 {
                     type = "PACKED_MAP";
                 }
-                int endPosition = 0;
-
-                List<int> adress = new List<int>();
+                uint Counting = 0;
+                List<uint> adress = new List<uint>();
                 List<string> types = new List<string>();
-                List<(int, string)> returner = new List<(int, string)>();
+                List<(uint, string)> returner = new List<(uint, string)>();
                 switch (type)
                 {
                     case "PACKED_MODEL":
+                        #region start offset
                         fs.Position = 0;
-                        startOffset = (int)fs.Position;
-                        endPosition = 4 +(br.ReadInt32() * 4);
-                        for(int i = 4; i < endPosition;i+=4)
+                        startOffset = (uint)fs.Position;
+                        #endregion
+                        Counting = readValue(fs, br, 0, NumberType.UINT)*4;
+                        uint currentOffset = 0;
+                        for (uint i = 4; i < Counting; i += 4)
                         {
-                            fs.Position = i;
-                            adress.Add(br.ReadInt32());
+                            if (readValue(fs, br, i, NumberType.UINT) != 0)
+                            {
+                                adress.Add(readValue(fs, br, i, NumberType.UINT));
+                            }
+                            currentOffset = i;
                         }
-                        for (int i = endPosition; i < ((endPosition-4)*2)+4; i += 4)
+                        for (uint i = currentOffset; i < Counting + currentOffset; i += 4)
                         {
-                            fs.Position = i;
-                            string encodedName = Encoding.UTF8.GetString(br.ReadBytes(4));
-                            types.Add(encodedName);
+                            if (readValue(fs, br, i, NumberType.UINT) != 0)
+                            {
+                                types.Add(readValue(fs, br, i, NumberType.STRING));
+                            }
                         }
                         for (int i = 0; i < adress.Count; i++) returner.Add((adress[i], types[i]));
                         adresses = returner.ToArray();
                         break;
                     case "PACKED_MAP":
                         fs.Position = 16;
-                       int additive = br.ReadInt32();
+                        uint additive = br.ReadUInt32();
                         fs.Position = 16;
                         fs.Position = br.ReadInt32();
-                        startOffset = (int)fs.Position;
-                        //544
-                        //664
-                        int startPosition = (int)fs.Position;
-                        endPosition = startPosition + (4 + (br.ReadInt32() * 4));
+                        startOffset = (uint)fs.Position;
+                        uint startPosition = (uint)fs.Position;
+                        Counting = startPosition + (4 + (br.ReadUInt32() * 4));
 
-                        //GD.Print(startPosition + "   " + endPosition + "   " + ((endPosition-4) - startPosition));
-
-                        for (int i = startPosition + 4; i < endPosition; i += 4)
+                        for (uint i = startPosition + 4; i < Counting; i += 4)
                         {
                             fs.Position = i;
-                            adress.Add(br.ReadInt32()+ additive);
+                            adress.Add(br.ReadUInt32() + additive);
                         }
-                        for (int i = endPosition; i < endPosition + ((endPosition - 4) - startPosition); i += 4)
+                        for (uint i = Counting; i < Counting + ((Counting - 4) - startPosition); i += 4)
                         {
                             fs.Position = i;
                             string encodedName = Encoding.UTF8.GetString(br.ReadBytes(4));
@@ -79,40 +78,9 @@ namespace FILE_MANAGING
                         for (int i = 0; i < adress.Count; i++) returner.Add((adress[i], types[i]));
                         adresses = returner.ToArray();
                         break;
-
                 }
             }
-            return new(adresses, type,startOffset);
+            return new(adresses, type, startOffset);
         }
-    }
-}
-namespace MD
-{
-    public static class SCR
-    {
-        public static string CheckFormat(string path)
-        {
-            using (FileStream fs = new FileStream(path, FileMode.Open))
-            using (BinaryReader br = new BinaryReader(fs))
-            {
-                if (br.ReadInt32() == 7496563)
-                {
-                    if (path.Contains(".scr") || path.Contains(".SCR"))
-                    {
-                        return "Model16";
-                    }
-                    else
-                    {
-                        return "Model32";
-                    }
-                }
-                return "PackedFile";
-            }
-        }
-    }
-    public class modelConstructor
-    {
-        public string name;
-        public int adress = 0;
     }
 }
