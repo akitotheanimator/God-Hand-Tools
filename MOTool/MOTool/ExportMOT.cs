@@ -121,6 +121,7 @@ public class ExportBones
     }
     public Vector3 getRotation(int frame)
     {
+        //Console.WriteLine(VRX.Length + "  " + VRY.Length + "    " + VRZ.Length + "    " + frame);
         return new Vector3(VRX[frame], VRY[frame], VRZ[frame]);
     }
 
@@ -135,26 +136,27 @@ public class ExportBones
         if (VRZ == null) VRZ = new float[0];
 
 
-        for (int i = 0; i < SMDExportMOT.animation_length; i++)
+        for (int i = 0; i < MOTFile.getFrameLength(); i++)
             tmp.Add(0);
-        if (VPX.Length == 0)
+
+
+        if (VPX.Length == 0 || VPX.Length < tmp.Count)
             VPX = tmp.ToArray();
-        if (VPY.Length == 0)
+        if (VPY.Length == 0 || VPY.Length < tmp.Count)
             VPY = tmp.ToArray();
-        if (VPZ.Length == 0)
+        if (VPZ.Length == 0 || VPZ.Length < tmp.Count)
             VPZ = tmp.ToArray();
-        if (VRX.Length == 0)
+        if (VRX.Length == 0 || VRX.Length < tmp.Count)
             VRX = tmp.ToArray();
-        if (VRY.Length == 0)
+        if (VRY.Length == 0 || VRY.Length < tmp.Count)
             VRY = tmp.ToArray();
-        if (VRZ.Length == 0)
+        if (VRZ.Length == 0 || VRZ.Length < tmp.Count)
             VRZ = tmp.ToArray();
     }
 }
 public static class SMDExportMOT
 {
     public static ExportBones[] exportBones;
-    public static int animation_length = -1;
     #region valve decimal thingy
     public static string returnDecimal(float number)
     {
@@ -202,8 +204,6 @@ public static class SMDExportMOT
         #region initialize variables and etc
         exportBones = new ExportBones[0];
         List<ExportBones> ebns = exportBones.ToList();
-        animation_length = -32568;
-        int cidx = -32568;
         #endregion
         for (int i = 0; i < Program.bones_.Length; i++)
         {
@@ -214,7 +214,7 @@ public static class SMDExportMOT
             //Console.WriteLine(export.exportID);
             export.pos = Program.bones_[i].pos;
 
-            int[] bone_datas = MOTFile.Distinct(export.exportID-1);
+            int[] bone_datas = MOTFile.Distinct(export.exportID - 1);
             for (int p = 0; p < bone_datas.Length; p++)
             {
                 export.useIK = MOTFile.bones[bone_datas[p]].data.isAbsoluteCoordinate;
@@ -224,20 +224,18 @@ public static class SMDExportMOT
                 if (MOTFile.bones[bone_datas[p]].type == "rotation.x") export.VRX = MOTFile.bones[bone_datas[p]].data.Values;
                 if (MOTFile.bones[bone_datas[p]].type == "rotation.y") export.VRY = MOTFile.bones[bone_datas[p]].data.Values;
                 if (MOTFile.bones[bone_datas[p]].type == "rotation.z") export.VRZ = MOTFile.bones[bone_datas[p]].data.Values;
-                animation_length = MOTFile.bones[0].data.Values.Length;
             }
             ebns.Add(export);
         }
         exportBones = ebns.ToArray();
 
-        for(int i = 0; i < exportBones.Length;i++)
+        for (int i = 0; i < exportBones.Length; i++)
         {
             exportBones[i].fillMissing();
         }
-
         int get = -32168;
 
-        using (FileStream fs = new FileStream(Program.saveFileTo+"/" + Path.GetFileNameWithoutExtension(file) + ".smd", FileMode.Create))
+        using (FileStream fs = new FileStream(Program.saveFileTo + "/" + Path.GetFileNameWithoutExtension(file) + ".smd", FileMode.Create))
         using (StreamWriter sw = new StreamWriter(fs))
         {
 
@@ -260,7 +258,7 @@ public static class SMDExportMOT
                         {
                             sw.WriteLine($"{Program.bones_[i].parentingOrder} \"{Program.bones_[i].parentingOrder}\" {Program.bones_[i].id}");
                         }
-                        
+
                     }
                     else
                     {
@@ -273,7 +271,7 @@ public static class SMDExportMOT
             int scheduleIK = -32168;
 
             sw.WriteLine("end\nskeleton");
-            for (int frame = 0; frame < MOTFile.bones[0].data.Values.Length; frame++)
+            for (int frame = 0; frame < MOTFile.getFrameLength(); frame++)
             {
                 sw.WriteLine("time " + frame);
                 for (int bone_frames = 0; bone_frames < exportBones.Length; bone_frames++)
@@ -288,13 +286,15 @@ public static class SMDExportMOT
                             Vector3 r = exportBones[bone_frames].getRotation(frame);
                             sw.WriteLine($"{exportBones[bone_frames].exportID}\t{returnDecimal(p.X)} {returnDecimal(p.Y)} {returnDecimal(p.Z)}\t{returnDecimal(r.X)} {returnDecimal(r.Y)} {returnDecimal(r.Z)}");
                             scheduleIK = -32168;
-                        } else
+                        }
+                        else
                         {
                             Vector3 p = exportBones[bone_frames].getPosition(frame);
                             Vector3 r = exportBones[bone_frames].getRotation(frame);
                             sw.WriteLine($"{exportBones[bone_frames].exportID}\t{returnDecimal(p.X)} {returnDecimal(p.Y)} {returnDecimal(p.Z)}\t{returnDecimal(r.X)} {returnDecimal(r.Y)} {returnDecimal(r.Z)}");
                         }
-                    } else
+                    }
+                    else
                     {
                         scheduleIK = 2;
                         Vector3 p = exportBones[bone_frames].getPosition(frame);
@@ -305,12 +305,11 @@ public static class SMDExportMOT
                 }
             }
         }
-
+        GlobalTools.changeColor(ConsoleColor.White);
         Console.WriteLine("File saved sucesfully at " + (Program.saveFileTo + "/" + Path.GetFileNameWithoutExtension(file) + ".smd") + "!");
-        if(Program.ETA-1 > 0)
+        if (Program.ETA - 1 > 0)
         {
-            GlobalTools.changeColor(ConsoleColor.White);
-            Console.WriteLine((Program.ETA-1) + " Files remaining!");
+            Console.WriteLine((Program.ETA - 1) + " Files remaining!");
         }
         Console.WriteLine("-------------------------------------------------------");
     }

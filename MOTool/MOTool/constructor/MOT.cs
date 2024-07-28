@@ -97,9 +97,6 @@ public static class MOTFile
 
         for (int a = 0; a < bones.Length; a++)
         {
-
-
-
             for (int i = 0; i < bones[a].data.curves.Length - 1; i++)
             {
                 for (int frame = bones[a].data.curves[i].absolute_index; frame < bones[a].data.curves[i+1].absolute_index; frame++)
@@ -135,6 +132,17 @@ public static class MOTFile
                 ret = true;
 
         return ret;
+    }
+    public static int getFrameLength()
+    {
+        int rlength = -1;
+        for (int i = 0; i < bones.Length; i++)
+            if (bones[i] != null)
+                if (bones[i].data.Values != null)
+                    if (bones[i].data.Values.Length > 0)
+                        if (rlength < bones[i].data.Values.Length)
+                            rlength = bones[i].data.Values.Length;
+        return rlength;
     }
     public static void addCurve(MOTKeyframe c, MOTHeader k)
     {

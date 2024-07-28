@@ -12,3 +12,6 @@ C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\refint\MOTool.dll
 C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\MOTool.pdb
 C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\MOTool.genruntimeconfig.cache
 C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\ref\MOTool.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\bin\Debug\net8.0\SharpGL.dll
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\MOTool.csproj.AssemblyReference.cache
+C:\Users\matheus\source\repos\MOTool\MOTool\obj\Debug\net8.0\MOTool.csproj.Up2Date
