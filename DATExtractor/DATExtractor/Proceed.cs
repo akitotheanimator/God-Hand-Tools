@@ -27,8 +27,6 @@ public static class Proceed
             for (int i = 0; i < tempMemory.Item1.Length; i++)
             {
                 Directory.CreateDirectory(rootFolder + "/" + (tempMemory.Item1[i].Item2.Replace("\0","")) + "/");
-
-
                 string selectedFolder = rootFolder + "/" + (tempMemory.Item1[i].Item2.Replace("\0", "")) + "/";
                 if (i + 1 < tempMemory.Item1.Length)
                 {

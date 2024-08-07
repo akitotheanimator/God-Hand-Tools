@@ -36,19 +36,24 @@ namespace FILE_MANAGING
                         startOffset = (uint)fs.Position;
                         #endregion
                         Counting = readValue(fs, br, 0, NumberType.UINT)*4;
+                        Counting += 4;
                         uint currentOffset = 0;
                         for (uint i = 4; i < Counting; i += 4)
                         {
                             if (readValue(fs, br, i, NumberType.UINT) != 0)
                             {
+                                Console.WriteLine(readValue(fs, br, i, NumberType.UINT));
                                 adress.Add(readValue(fs, br, i, NumberType.UINT));
                             }
                             currentOffset = i;
                         }
-                        for (uint i = currentOffset; i < Counting + currentOffset; i += 4)
+                        for (uint i = Counting; i < Counting + currentOffset; i += 4)
                         {
+
                             if (readValue(fs, br, i, NumberType.UINT) != 0)
                             {
+
+                                Console.WriteLine(readValue(fs, br, i, NumberType.STRING));
                                 types.Add(readValue(fs, br, i, NumberType.STRING));
                             }
                         }
