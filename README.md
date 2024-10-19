@@ -39,5 +39,5 @@ MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD.
 ![ezgif-1-5676d2ae5a](https://github.com/user-attachments/assets/d4294290-a0af-49c9-9fd6-1f06f7bd6b9b)
 
 
-**However, In order to have the MOTool to convert the .MOT to .smd, you need to extract your .MD model using MDToSMD2.0. MDToSMD2.0 is disponibilized on my god hand toolpack.**
+**However, In order to have the MOTool to convert the .MOT to .smd, you need to extract your .MD model using MDToSMD2.0,which is disponibilized on my god hand toolpack.**
 How to use the tools: https://www.youtube.com/watch?v=GyOX3qUXCUM
