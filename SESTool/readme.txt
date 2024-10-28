@@ -1,0 +1,1 @@
+if you're compiling the solution, remember that SESTool only works if MFAudio is in the same directory of the build.
