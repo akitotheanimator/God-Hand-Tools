@@ -48,3 +48,4 @@ My lastest tool, thanks to MFAudio, the creation of Muzzleflash, now God Hand .S
 Note: **SESTool doesn't work if a MFAudio executable isn't located in the same path as the SESTool executable.**
 Check MFAudio, by MuzzleFlash!
 https://gamebanana.com/tools/6656
+How to use it: https://youtu.be/5khJHuOooMw
