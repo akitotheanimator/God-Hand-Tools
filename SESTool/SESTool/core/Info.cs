@@ -30,7 +30,8 @@ public class Info
         using (FileStream fs = new FileStream(path, FileMode.Open))
         using (BinaryReader bn = new BinaryReader(fs))
         {
-            for (uint i = 0; i < fs.Length; i += 4) {
+            for (uint i = 0; i < fs.Length; i += 4)
+            {
                 fs.Position = i;
                 orders.Add(bn.ReadInt32());
             }
@@ -57,25 +58,34 @@ public class Info
                 {
                     sampleRate.Add(11025);
                 }
-                for (uint e = 32; e < fs.Length; e+=16)
+
+                for (int f = 0; f < 16; f++)
+                {
+                    curData.Add(0);
+                }
+                bool startReadng = false;
+                for (uint e = 32; e < fs.Length; e += 16)
                 {
                     fs.Position = e;
-                    if(e+24 < fs.Length)
-                    if(GlobalTools.readValue(fs,bn,e+16,GlobalTools.NumberType.LONG) == 0 && GlobalTools.readValue(fs, bn, e + 24, GlobalTools.NumberType.LONG) == 0)
-                        for (int f = 0; f < 16; f++)
-                        {
-                            curData.Add(0);
-                        }
-                    for (uint f = e; f < e + 16; f++)
+
+
+                    if (startReadng)
                     {
-                        fs.Position = f;
-                        curData.Add(bn.ReadByte());
+                        for (uint f = e; f < e + 16; f++)
+                        {
+                            fs.Position = f;
+                            curData.Add(bn.ReadByte());
+                        }
                     }
+                    if (e + 24 < fs.Length)
+                        if (GlobalTools.readValue(fs, bn, e + 16, GlobalTools.NumberType.LONG) != 0 || GlobalTools.readValue(fs, bn, e + 24, GlobalTools.NumberType.LONG) != 0)
+                        {
+                            startReadng = true;
+                        }
                 }
                 data.Add(curData.ToArray());
             }
         }
-        return (data.ToArray(),sampleRate.ToArray());
+        return (data.ToArray(), sampleRate.ToArray());
     }
-
 }

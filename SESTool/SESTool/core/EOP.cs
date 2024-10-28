@@ -170,7 +170,7 @@ public static class EOP
                                 #endregion
                             }
                             #region convert
-                            string name2 = filePath.Replace(Path.GetFileName(filePath), Path.GetFileNameWithoutExtension(filePath) + "_SES_CONVERTED/WAV/" + Infos[i].name + ".vag");
+                            string name2 = filePath.Replace(Path.GetFileName(filePath), Path.GetFileNameWithoutExtension(filePath) + "_SES_CONVERTED/WAV/" + Infos[i].file + ".vag");
                             Process.Start(Directory.GetCurrentDirectory() + "/MFAudio.exe", $" /OTWAVU \"{name.Replace('/', '\\')}\" \"{name2.Replace('/', '\\').Replace(".vag", ".wav")}\"");
                             GlobalTools.changeColor(ConsoleColor.Green);
                             Console.WriteLine($"saved file to path {name2.Replace('/', '\\').Replace(".vag", ".wav")}!");
