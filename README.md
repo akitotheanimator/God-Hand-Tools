@@ -1,5 +1,7 @@
 # God Hand Tools
 
+**This whole pack is made in C# frameworks 8.0.0.**
+
 I have lost acess to my old account so i made a new one.
 God Hand Tools's purpose is to bring people packs of tools to convert god hand files to more flexible and modern ones.
 
