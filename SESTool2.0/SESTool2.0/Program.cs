@@ -36,7 +36,7 @@ public class Program
                 GlobalTools.changeColor(ConsoleColor.White);
                 Console.Write(" in this console...");
                 Console.WriteLine("");
-                string fpath = Console.ReadLine();
+                string fpath = Console.ReadLine().Replace("\"","");
 
                 if(File.Exists(fpath) && !Directory.Exists(fpath))
                 {
@@ -47,7 +47,7 @@ public class Program
                 {
                     GlobalTools.changeColor(ConsoleColor.Green);
                     Console.WriteLine("Reading paths...");
-                    string[] paths = Directory.GetFiles(fpath,"*");
+                    string[] paths = Directory.GetFiles(fpath.Replace("\"", ""),"*");
                     Console.WriteLine("Paths queue count: " + paths.Length);
                     for (int i = 0; i < paths.Length;i++)
                     {
@@ -81,7 +81,7 @@ public class Program
                 Console.Write("\"VAG\" Folder.");
 
                 Console.WriteLine("");
-                string vagspath = Console.ReadLine();
+                string vagspath = Console.ReadLine().Replace("\"", "");
 
                 if (File.Exists(vagspath) && !Directory.Exists(vagspath))
                 {
@@ -119,7 +119,7 @@ public class Program
                 {
                     GlobalTools.changeColor(ConsoleColor.Green);
                     Console.WriteLine("Reading paths...");
-                    string[] paths = Directory.GetFiles(fpath3, "*");
+                    string[] paths = Directory.GetFiles(fpath3.Replace("\"", ""), "*");
                     Console.WriteLine("Paths queue count: " + paths.Length);
                     for (int i = 0; i < paths.Length; i++)
                     {
@@ -143,7 +143,7 @@ public class Program
                 GlobalTools.changeColor(ConsoleColor.White);
                 Console.Write(" in this console. (the ideal sampling rate is 11025 for better results, higher sampling rates will increase the audio quality, but will take more room in the .SES.\n The only type of .WAV files supported is 16-BIT MONO WAV files.");
                 Console.WriteLine("");
-                string wavpath = Console.ReadLine();
+                string wavpath = Console.ReadLine().Replace("\"", ""); ;
 
                 if (File.Exists(wavpath) && !Directory.Exists(wavpath))
                 {
@@ -178,7 +178,7 @@ public class Program
                 GlobalTools.changeColor(ConsoleColor.White);
                 Console.Write(" in this console.");
                 Console.WriteLine("");
-                string vagpath = Console.ReadLine();
+                string vagpath = Console.ReadLine().Replace("\"", "");
 
                 if (File.Exists(vagpath) && !Directory.Exists(vagpath))
                 {
