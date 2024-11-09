@@ -51,3 +51,6 @@ Note: **SESTool doesn't work if a MFAudio executable isn't located in the same p
 Check MFAudio, by MuzzleFlash!
 https://gamebanana.com/tools/6656
 How to use it: https://youtu.be/5khJHuOooMw
+
+# Blen2MOT
+Export animations from Blender to God hand MOT Format.
