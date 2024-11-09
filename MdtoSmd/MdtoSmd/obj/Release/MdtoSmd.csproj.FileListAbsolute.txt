@@ -1,0 +1,7 @@
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\obj\Release\MdtoSmd.csproj.AssemblyReference.cache
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\obj\Release\MdtoSmd.csproj.CoreCompileInputs.cache
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\bin\Release\MdtoSmd.exe.config
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\bin\Release\MdtoSmd.exe
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\bin\Release\MdtoSmd.pdb
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\obj\Release\MdtoSmd.exe
+C:\Users\mathe\source\repos\MdtoSmd\MdtoSmd\obj\Release\MdtoSmd.pdb
