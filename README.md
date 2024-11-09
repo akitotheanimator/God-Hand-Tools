@@ -1,6 +1,6 @@
-![image](https://github.com/user-attachments/assets/5bb5ef96-9861-4746-8d24-be636ae43f4c)# God Hand Tools
+# God Hand Tools
 
-**This whole pack is made in C# frameworks 8.0.0.**
+**This whole pack is made in C# frameworks 4.8**
 
 I have lost acess to my old account so i made a new one.
 God Hand Tools's purpose is to bring people packs of tools to convert god hand files to more flexible and modern ones.
