@@ -1,0 +1,7 @@
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\obj\Release\DATExtractor.csproj.AssemblyReference.cache
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\obj\Release\DATExtractor.csproj.CoreCompileInputs.cache
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\bin\Release\DATExtractor.exe.config
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\bin\Release\DATExtractor.exe
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\bin\Release\DATExtractor.pdb
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\obj\Release\DATExtractor.exe
+C:\Users\mathe\source\repos\DATExtractor\DATExtractor\obj\Release\DATExtractor.pdb
