@@ -58,3 +58,7 @@ This tool comes with a blender .py addon that needs to be installed.
 Simplify curves is also required to use this addon.
 
 ![ezgif-7-9a93bc8ca1](https://github.com/user-attachments/assets/46f1cfab-3a34-4e91-a2cb-26967363dcc5)
+
+How to use:
+
+https://www.youtube.com/watch?v=-plPDKMJBEA
