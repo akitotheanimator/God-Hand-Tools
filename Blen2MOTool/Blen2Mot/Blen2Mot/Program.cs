@@ -16,16 +16,22 @@ public static class Program
     public static byte[] IKBones;
     static void Main(string[] args)
     {
+
+
         if (args.Length > 0)
         {
+            string[] arg = File.ReadAllLines(args[0]);
+
+
             List<byte> BonesIK = new List<byte>();
-            string infoPath = args[0];
-            string animationName = args[1];
-            string bonesPath = args[4];
-            string[] ikboneSplit = args[3].Split(',');
-            loops = bool.Parse(args[2]);
-            infoPath = args[0];
-            animationName = args[1];
+            string infoPath = arg[0];
+            string animationName = arg[1];
+            string bonesPath = arg[4];
+            Console.WriteLine(arg[3]);
+            string[] ikboneSplit = arg[3].Split(',');
+            loops = bool.Parse(arg[2]);
+            infoPath = arg[0];
+            animationName = arg[1];
             #region bones
             foreach (var a in ikboneSplit)
             {
@@ -43,18 +49,18 @@ public static class Program
                 }
             }
             #endregion
-            if (args.Length > 5)
+            if (arg.Length > 5)
             {
-                ViewOutput = bool.Parse(args[5]);
+                ViewOutput = bool.Parse(arg[5]);
                 IKBones = BonesIK.ToArray();
-                bonesPath = args[4];
+                bonesPath = arg[4];
 
 
             } else
             {
-                ViewOutput = bool.Parse(args[4]);
+                ViewOutput = bool.Parse(arg[4]);
                 IKBones = BonesIK.ToArray();
-                bonesPath = args[3];
+                bonesPath = arg[3];
             }
             closeAutomatically = ViewOutput == false;
 
