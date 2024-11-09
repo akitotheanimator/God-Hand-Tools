@@ -54,7 +54,7 @@ How to use it: https://youtu.be/5khJHuOooMw
 
 # Blen2MOT
 Export animations from Blender to God hand MOT Format.
-This tool comes with a blender .py addon that needs to be installed
+This tool comes with a blender .py addon that needs to be installed.
 Simplify curves is also required to use this addon.
 
 ![ezgif-7-9a93bc8ca1](https://github.com/user-attachments/assets/46f1cfab-3a34-4e91-a2cb-26967363dcc5)
