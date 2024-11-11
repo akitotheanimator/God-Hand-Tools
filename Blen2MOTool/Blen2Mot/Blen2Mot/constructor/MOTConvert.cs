@@ -135,6 +135,7 @@ public static class MOTConvert
                     bn.Write(data[i].dm0);
                     bn.Write(data[i].m1);
                     bn.Write(data[i].dm1);
+                    
                     for (int o = 0; o < data[i].curves.Length; o++)
                     {
                         bn.Write(data[i].curves[o].time);
@@ -144,7 +145,6 @@ public static class MOTConvert
                     }
                 }
             }
-            Console.WriteLine(AdressOffset.Count + "  " + Offsets.Count);
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
             GlobalTools.writeOnConsole("Writting calculated offsets...", ConsoleColor.Yellow);
             for (int i = 0; i < AdressOffset.Count; i++)
@@ -155,7 +155,7 @@ public static class MOTConvert
             }
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
         }
-        GlobalTools.writeOnConsole("Animation " + path + " created sucessfully!", ConsoleColor.Green);
+        Console.WriteLine("Animation " + path + " created sucessfully!", ConsoleColor.Green);
         if (!Program.closeAutomatically)
         {
             GlobalTools.writeOnConsole("Press Enter to close the console...", ConsoleColor.Green);

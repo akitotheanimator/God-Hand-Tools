@@ -27,7 +27,6 @@ public static class Program
             string infoPath = arg[0];
             string animationName = arg[1];
             string bonesPath = arg[4];
-            Console.WriteLine(arg[3]);
             string[] ikboneSplit = arg[3].Split(',');
             loops = bool.Parse(arg[2]);
             infoPath = arg[0];
@@ -43,7 +42,7 @@ public static class Program
                 {
                     if (a != "")
                     {
-                        Console.WriteLine(a + "  was not formatted correctly, remove spaces or weird characters from the bone IK list.");
+                        GlobalTools.writeOnConsole(a + "  was not formatted correctly, remove spaces or weird characters from the bone IK list.",ConsoleColor.DarkRed);
                         closeAutomatically = false;
                     }
                 }

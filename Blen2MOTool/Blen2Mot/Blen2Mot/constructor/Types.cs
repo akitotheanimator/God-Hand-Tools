@@ -14,6 +14,8 @@ public class Header
     public float[] oP, oM0, oM1;
     public int[] absoluteTime;
 
+    public float miP, maP;
+
     public void calculateHeaderValues()
     {
         float minP = float.MaxValue,
@@ -24,27 +26,29 @@ public class Header
             maxM1 = float.MinValue;
         for (int i = 0; i < oP.Length; i++)
         {
-            float valueP = oP[i];
-            float valueM0 = oM0[i];
-            float valueM1 = oM1[i];
             switch(type)
             {
                 case 16:
-                    valueP += MOTConvert.bones_[bone+1].pos.X; break;
+                    oP[i] += MOTConvert.bones_[bone+1].pos.X; break;
                 case 17:
-                    valueP += MOTConvert.bones_[bone+1].pos.Y; break;
+                    oP[i] += MOTConvert.bones_[bone+1].pos.Y; break;
                 case 18:
-                    valueP += MOTConvert.bones_[bone+1].pos.Z; break;
+                    oP[i] += MOTConvert.bones_[bone+1].pos.Z; break;
             } //applies the offset
-
-
-            if (valueP > maxP) maxP = valueP;
-            if (valueP < minP) minP = valueP;
-            if (valueM0 > maxM0) maxM0 = valueM0;
-            if (valueM0 < minM0) minM0 = valueM0;
-            if (valueM1 > maxM1) maxM1 = valueM1;
-            if (valueM1 < minM1) minM1 = valueM1;
         }
+        List<float> vl = oP.ToList(); vl.Sort((y, w) => y.CompareTo(w));
+        minP = vl[0];  maxP = vl[vl.Count - 1];
+
+        List<float> m0vl = oM0.ToList(); m0vl.Sort((y, w) => y.CompareTo(w));
+        minM0 = m0vl[0]; maxM0 = m0vl[m0vl.Count - 1];
+
+        List<float> m1vl = oM1.ToList(); m1vl.Sort((y, w) => y.CompareTo(w));
+        minM1 = m1vl[0]; maxM1 = m1vl[m1vl.Count - 1];
+
+
+
+
+
         float rP = minP;
         float rdP = (maxP - rP) / 255;
         p = IEEEBinary16.ToUshort(rP);
@@ -57,6 +61,9 @@ public class Header
         float rdM1 = (maxM1 - rM1) / 255;
         m1 = IEEEBinary16.ToUshort(rM1);
         dm1 = IEEEBinary16.ToUshort(rdM1);
+
+        miP = rP;
+        maP = rdP;
 
         List<keyframe> curve = new List<keyframe>();
         for (int i = 0; i < oP.Length; i++)
