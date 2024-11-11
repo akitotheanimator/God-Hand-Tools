@@ -67,8 +67,8 @@ class OBJECT_OT_Export(Operator):
         with open(file_path_args, 'w') as file:
            file.write(file_path + '\n' + action.name + '\n' + str(context.scene.loop) + '\n' + str(context.scene.bones_that_uses_ik) + '\n' + str(context.scene.bone_path) + '\n' + str(context.scene.output))
            
-        #os.system('start /wait ' + context.scene.exe_path + ' ' + file_path + ' ' + action.name + ' ' + str(context.scene.loop) + ' ' + str(context.scene.bones_that_uses_ik) + ' ' + str(context.scene.bone_path) + ' ' + str(context.scene.output))
-        os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args)
+        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
+        #os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args)
         
         self.report({'INFO'}, "Export complete.")
         return {'FINISHED'}
