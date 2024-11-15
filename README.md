@@ -70,3 +70,13 @@ You will need a god hand model that had been extracted with MdToSmd tool in orde
 How to use:
 
 https://www.youtube.com/watch?v=-plPDKMJBEA
+
+**Rules:**
+* ONLY USE EULER ROTATIONS. QUATERNION ROTATION will be IGNORED.
+* Apply IK on bones by checking the hierchary list. input in the bone IK Field the corresponding "Level" number of the bone you want to use.
+* NEVER rename a bone.
+* NEVER export the animation with constraints. they will be IGNORED.
+**Tips:**
+* (In case you want to animate Gene.)Some animations in God Hand uses Animated Camera. To animate the god hand camera , keep in mind how the camera works. In gene's skeleton, we can see a bone called 28 and 29.
+In this case, bone 28 is where the camera is located, and bone 29 is where the camera will look at. To animate the camera's FOV, animate bone 28 Y Rotation.
+* Make sure to always optimize the animation. Either using F-Curve addon or cleaning up the curves manually. I know it's harder manually but sometimes that's the best option.
