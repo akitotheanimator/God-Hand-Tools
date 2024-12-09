@@ -58,7 +58,7 @@ How to use it:
 
 https://youtu.be/5khJHuOooMw
 
-# Blen2MOT
+# Blen2MOT (For blender 3.6 ONLY)
  ![2 Sem Título_20241109160626](https://github.com/user-attachments/assets/df00439e-6725-4db2-9497-db5a61a2a9d1)
 
  
