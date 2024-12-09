@@ -58,7 +58,7 @@ How to use it:
 
 https://youtu.be/5khJHuOooMw
 
-# Blen2MOT (For blender 3.6 ONLY)
+# Blen2MOT
  ![2 Sem Título_20241109160626](https://github.com/user-attachments/assets/df00439e-6725-4db2-9497-db5a61a2a9d1)
 
  
@@ -81,3 +81,7 @@ https://www.youtube.com/watch?v=-plPDKMJBEA
 * (In case you want to animate Gene.)Some animations in God Hand uses Animated Camera. To animate the god hand camera , keep in mind how the camera works. In gene's skeleton, we can see a bone called 28 and 29.
 In this case, bone 28 is where the camera is located, and bone 29 is where the camera will look at. To animate the camera's FOV, animate bone 28 Y Rotation.
 * Make sure to always optimize the animation. Either using F-Curve addon or cleaning up the curves manually. I know it's harder manually but sometimes that's the best option.
+
+
+
+# if you need anything contact me in discord srnoobi#3108!
