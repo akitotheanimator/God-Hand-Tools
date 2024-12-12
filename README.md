@@ -67,6 +67,7 @@ https://youtu.be/5khJHuOooMw
 
  
 Export animations from Blender to God hand MOT Format.
+Import God hand MOT to Blender.
 This tool comes with a blender .py addon that needs to be installed.
 You will need a god hand model that had been extracted with MdToSmd tool in order to animate for the game!
 
