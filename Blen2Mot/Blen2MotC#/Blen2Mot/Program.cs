@@ -32,7 +32,8 @@ public static class Program
         string infoPath = arg[0];
         string animationName = arg[1];
         string bonesPath = arg[4];
-        isFullPrecision = bool.Parse(arg[5]);
+        isFullPrecision = bool.Parse(arg[6]);
+        //Console.WriteLine(isFullPrecision);
         string[] ikboneSplit = new string[] { };
         if (arg[3] != "")
             ikboneSplit = arg[3].Split(',');

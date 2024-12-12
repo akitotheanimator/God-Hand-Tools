@@ -26,7 +26,7 @@ public class Header
             maxM1 = float.MinValue;
         for (int i = 0; i < oP.Length; i++)
         {
-            switch(type)
+            switch (type)
             {
                 case 16:
                     oP[i] += MOTConvert.bones_[bone+1].pos.X; break;
@@ -34,6 +34,12 @@ public class Header
                     oP[i] += MOTConvert.bones_[bone+1].pos.Y; break;
                 case 18:
                     oP[i] += MOTConvert.bones_[bone+1].pos.Z; break;
+                case 80:
+                    oP[i] += MOTConvert.bones_[bone + 1].pos.X; break;
+                case 81:
+                    oP[i] += MOTConvert.bones_[bone + 1].pos.Y; break;
+                case 82:
+                    oP[i] += MOTConvert.bones_[bone + 1].pos.Z; break;
             } //applies the offset
         }
         List<float> vl = oP.ToList(); vl.Sort((y, w) => y.CompareTo(w));
