@@ -38,7 +38,8 @@ It have a map model support but **it's very W.I.P. i don't recomend trying to us
 
 # MOTool (obsolete)
 MOTool is a brand new tool for the pack that converts god hand MOT to valve SMD. You will need a .bones file to convert the files correctly, which i have implemented on the brand new version of MdtoSmd.
-This tool still works fine, But Blen2MOT has the same function and works better.
+**This tool still works fine, But Blen2MOT has the same function and works better.**
+
 ![ezgif-1-5676d2ae5a](https://github.com/user-attachments/assets/d4294290-a0af-49c9-9fd6-1f06f7bd6b9b)
 
 
