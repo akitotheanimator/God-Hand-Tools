@@ -21,11 +21,24 @@ class OBJECT_OT_Export(Operator):
     bl_description = "Export animation F-Curves with Hermite interpolation values"
 
     def execute(self, context):
+                    
+                    
+                    
         folder_path = context.scene.folder_path
         if not folder_path:
             self.report({'WARNING'}, "No folder selected.")
             return {'CANCELLED'}
         obj = context.object
+        
+        if obj and obj.type == 'ARMATURE':
+           for bone in obj.pose.bones:
+            for constraint in bone.constraints:
+               if "BLEN2MOT" in constraint.name:
+                 toggle(context);
+                 break
+        
+        
+        
         action = obj.animation_data.action if obj and obj.animation_data else None
         if action is None:
             self.report({'WARNING'}, "No action (animation) found.")
@@ -366,13 +379,22 @@ class CleanupOperator(bpy.types.Operator):
 class OBJECT_OT_FeetSetup(Operator):
     bl_idname = "object.feet_action"
     bl_label = "Feet setup"
-    bl_description = "Prepares feets for animation / export"
+    bl_description = "Toggles feets for animation / export"
 
     def execute(self, context):
+       toggle(context);
+       return {'FINISHED'}
+       
+def toggle(context):
         if(context.scene.bones_that_uses_ik == ""):
                 self.report({'ERROR'}, "No feet bone was written in the \"Foot bones\" field!")
                 return {'FINISHED'}
         obj = context.object
+        if obj and obj.type != 'ARMATURE':
+                self.report({'ERROR'}, "Select an armature!")
+                return {'FINISHED'}
+        
+        
         
         bpy.ops.object.mode_set(mode='POSE')
         bpy.ops.pose.select_all(action='DESELECT')
@@ -480,7 +502,8 @@ class OBJECT_OT_FeetSetup(Operator):
                           bone = obj.pose.bones[str(name2)]
                           bone.bone_group = group
         return {'FINISHED'}
-    
+
+
 class VIEW3D_PT_MOTPanel(Panel):
     bl_label = "Blen2MOT"
     bl_idname = "VIEW3D_PT_MTP"
@@ -508,11 +531,38 @@ class VIEW3D_PT_MOTPanel(Panel):
         boxMS = boxMSA.box()
         boxMS.label(text="MOT Settings", icon='SETTINGS');
         
-        
         boxMS.prop(scene, "loop", text="Animation loops?", icon='CONSTRAINT')
         boxMS.prop(scene, "cutscene", text="Full Precision?", icon='OUTLINER_DATA_CAMERA')
         
+        boxMSa1 = boxMS.box()
+        chosen = "QUESTION"
+
+
+        Mode="None"
+        armature_obj = bpy.context.active_object
         
+        if armature_obj and armature_obj.type == 'ARMATURE':
+           for bone in armature_obj.pose.bones:
+            for constraint in bone.constraints:
+               if "BLEN2MOT" in constraint.name:
+                 Mode = "Animation"
+                 break
+            if Mode != "Animation": 
+                Mode = "Export"
+             
+             
+             
+             
+        if Mode == "Animation":
+           chosen = "PLAY"
+        if Mode == "Export":
+           chosen = "EXPORT"
+
+
+
+             
+             
+        boxMSa1.label(text="Current Mode: " + Mode, icon=chosen);
         
         boxMS.operator("object.feet_action", text="Toggle Foot Rig", icon='RIGHTARROW_THIN')
         
@@ -523,9 +573,13 @@ class VIEW3D_PT_MOTPanel(Panel):
         boxHI.label(text="Bone hierchary", icon='MOD_ARMATURE')
         boxHI.separator();
         
-        armature_obj = bpy.context.active_object
         if armature_obj and armature_obj.type == 'ARMATURE':
             bones = armature_obj.data.bones
+            
+            
+            
+
+
             def print_bone_info(bone, level=0):
                 parent_index = -1 if bone.parent is None else bones.find(bone.parent.name)
                 bn = ""
