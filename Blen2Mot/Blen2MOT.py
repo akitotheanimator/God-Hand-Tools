@@ -10,15 +10,162 @@ bl_info = {
 }
 
 import bpy
-from bpy.props import StringProperty, BoolProperty, FloatProperty
-from bpy.types import Panel, Operator
+from bpy.props import StringProperty, BoolProperty, FloatProperty,CollectionProperty
+from bpy.types import Panel, Operator,OperatorFileListElement
 from bpy_extras.io_utils import ImportHelper
 import os
 
+
+class OBJECT_OT_Import(Operator, ImportHelper):
+    bl_idname = "object.import_action"
+    bl_label = "Import MOT Animation"
+    bl_description = "Import MOT animation"
+
+
+
+    files: CollectionProperty(
+        name="File Path",
+        type=OperatorFileListElement,
+        )
+    directory: StringProperty(
+        subtype='DIR_PATH',
+        )
+            
+    filter_glob: StringProperty(
+        default="*.mot",
+        options={'HIDDEN'},
+        maxlen=255,
+    )
+    
+    def execute(self, context):
+      obj = context.object
+      if obj and obj.type != 'ARMATURE':
+            self.report({'WARNING'}, "Select a armature!")
+            return {'CANCELLED'}
+      bpy.ops.object.mode_set(mode='POSE')
+      bpy.ops.pose.select_all(action='SELECT')
+      bpy.ops.pose.rotation_mode_set(type='XYZ')
+      bpy.ops.pose.rot_clear()
+      bpy.ops.pose.loc_clear()
+      bpy.ops.pose.scale_clear()
+      bpy.ops.pose.select_all(action='DESELECT')      
+      directory = self.directory
+      for file in self.files:
+        filepath = os.path.join(directory, file.name)  
+        #os.system('start cmd /k ' + context.scene.exe_path + ' ' + filepath + ' True ' + context.scene.bone_path)
+        
+        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + filepath + '\" \"True\" \"' + context.scene.bone_path + "\"")
+        
+        if obj.animation_data is None:
+            obj.animation_data_create()  # Create the animation data block if it doesn't exist
+    
+        action = bpy.data.actions.new(name=os.path.basename(filepath))
+        obj.animation_data.action = action  # This makes it the active action
+        #print(filepath.replace(".mot","_FTEMP.MFIL"));
+
+        
+        with open(filepath.replace(".mot","_FTEMP.MFIL")) as file: #istg why is python built like that?
+           file_content = file.read()
+           pSplit = file_content.split("\n")
+           for line in pSplit:
+               
+               
+               if line.split("|")[0] != "" :
+                 boneInt = int(line.split("|")[0]) + 1
+                 boneGet = str(boneInt);
+                 if boneInt == 0: 
+                   boneGet = "root"
+                   
+                   
+                 bone = obj.pose.bones.get(str(boneGet))
+                 boneName = str(boneGet)
+                 group = None
+                 for existing_group in bpy.context.object.animation_data.action.groups:
+                     if existing_group.name == boneName:
+                        group = existing_group
+                        break
+                 if not group:
+                        group = bpy.context.object.animation_data.action.groups.new(name=boneName)
+               
+                 transform = line.split("|")[1]
+                 splitTransform = line.split("$")
+                 valueArray = []
+                 for transformGet in splitTransform[1:]:
+                   transformData = transformGet.split(",")
+                   time = int(transformData[0]);
+                   p0 = float(transformData[1]);
+                   m0 = float(transformData[2]);
+                   m1 = float(transformData[3]);
+                   valueArray.append([time, p0, m0, m1])  # Add p0, m0, m1 to the list
+                   
+                 transformN = transform.replace(".x","").replace(".y","").replace(".z","")
+                 iType = 0;
+
+                       
+
+                 for i in range(0, len(valueArray), 1):
+                     p0 = valueArray[i][1]
+                     if "location" in transform:
+                          bone.location.x = p0
+                     else:
+                          bone.rotation_euler.x = p0
+                     if "y" in transform: 
+                         if "location" in transform:
+                             bone.location.y = p0
+                         else:
+                             bone.rotation_euler.y = p0
+                         iType = 1
+                     if "z" in transform:
+                         if "location" in transform:
+                             bone.location.z = p0
+                         else:
+                             bone.rotation_euler.z = p0
+                         iType = 2
+                     bone.keyframe_insert(data_path=transformN, index=iType, frame=valueArray[i][0])
+
+                 
+                 
+                 
+                 
+                 
+                 
+                 fcurve = action.fcurves.find(f'pose.bones["{boneName}"].{transformN}', index=iType)
+                 fcurve.group = group
+                 for i in range(0, len(fcurve.keyframe_points)-1, 1):
+                     p0 = valueArray[i][1]
+                     p1 = valueArray[i+1][1]
+                     m0 = valueArray[i][2]
+                     m1 = valueArray[i][3]
+                     fcurve.keyframe_points[i].handle_right_type = 'FREE'
+                     fcurve.keyframe_points[i].handle_left_type = 'FREE'
+                     fcurve.keyframe_points[i].handle_right.y = p0 + m1/3
+                     fcurve.keyframe_points[i].handle_left.y = p0 - m0/3
+                     
+                 p0 = valueArray[len(fcurve.keyframe_points)-1][1]
+                 m1 = valueArray[len(fcurve.keyframe_points)-1][3]
+                 fcurve.keyframe_points[len(fcurve.keyframe_points)-1].handle_right.y = p0 + m1/3
+                     
+                     
+                 bpy.context.scene.frame_end = valueArray[len(valueArray)-1][0]
+        os.remove(filepath.replace(".mot","_FTEMP.MFIL")) 
+                 
+                 
+
+                           
+      bpy.ops.object.mode_set(mode='POSE')
+      bpy.ops.pose.select_all(action='SELECT')
+      bpy.ops.pose.rotation_mode_set(type='XYZ')
+      bpy.ops.pose.rot_clear()
+      bpy.ops.pose.loc_clear()
+      bpy.ops.pose.scale_clear()
+      self.report({'INFO'}, f"Selected file: {filepath}")
+      return {'FINISHED'}
+    
+    
 class OBJECT_OT_Export(Operator):
     bl_idname = "object.export_action"
     bl_label = "Export"
-    bl_description = "Export animation F-Curves with Hermite interpolation values"
+    bl_description = "Export MOT animation"
 
     def execute(self, context):
                     
@@ -79,8 +226,11 @@ class OBJECT_OT_Export(Operator):
         file_path_args = folder_path + "MOTARGS" + action.name + ".txt"
         with open(file_path_args, 'w') as file:
            file.write(file_path + '\n' + action.name + '\n' + str(context.scene.loop) + '\n' + str(context.scene.bones_that_uses_ik) + '\n' + str(context.scene.bone_path) + '\n' + str(context.scene.output) + '\n' + str(context.scene.cutscene))
-           
-        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
+        
+        
+        self.report({'WARNING'}, 'start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
+        
+        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\" \"False\"')
         #os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args)
         
         self.report({'INFO'}, "Export complete.")
@@ -407,8 +557,8 @@ def toggle(context):
         
         allB = context.scene.bones_that_uses_ik.split(',')
         for b in allB:
-            name = int(b)+3
-            nameParent = int(b)+2
+            name = int(b)
+            nameParent = int(b)-1
             Bone = obj.data.edit_bones[str(name)]
             if(Bone.parent != obj.data.edit_bones['root']):
                Bone.parent = obj.data.edit_bones['root']
@@ -417,13 +567,19 @@ def toggle(context):
                Bone.parent = obj.data.edit_bones[str(nameParent)]
     
     
-    
             
         bpy.ops.object.mode_set(mode='POSE')
+        for bone in obj.pose.bones:
+            for constraint in bone.constraints:
+                  if constraint.name == "BLEN2MOT_LEG_SETUP":
+                    bone.constraints.remove(constraint)
+                    
+                    
         for b in allB:
-           name1 = int(b)+2
-           name2 = int(b)+3
+           name1 = int(b)-1
+           name2 = int(b)
            bone = obj.pose.bones[str(name1)]
+           
            if(isSetupAnimation):
                   constraint_exists = any(constraint.name == "BLEN2MOT_LEG_SETUP" for constraint in bone.constraints)
                   if not constraint_exists:
@@ -437,10 +593,6 @@ def toggle(context):
                      constraint.use_target_z = True
                      constraint.target = obj
                      constraint.subtarget = str(name2)
-           else:
-               for constraint in bone.constraints:
-                  if constraint.name == "BLEN2MOT_LEG_SETUP":
-                    bone.constraints.remove(constraint)
         bpy.ops.pose.select_all(action='DESELECT')
 
 
@@ -486,7 +638,7 @@ def toggle(context):
                     if(isSetupAnimation):
                        group.color_set = 'THEME08'
                        for b in allB:
-                          name2 = int(b)+3
+                          name2 = int(b)
                           bone = obj.pose.bones[str(name2)]
                           bone.bone_group = group
                        
@@ -498,7 +650,7 @@ def toggle(context):
                     if(isSetupAnimation):
                        group.color_set = 'THEME07'
                        for b in allB:
-                          name2 = int(b)+2
+                          name2 = int(b)-1
                           bone = obj.pose.bones[str(name2)]
                           bone.bone_group = group
         return {'FINISHED'}
@@ -516,25 +668,27 @@ class VIEW3D_PT_MOTPanel(Panel):
         scene = context.scene
         
         
-        layout.label(text="File Settings", icon='IMPORT')
-        boxFS = layout.box()
+        boxSett = layout.box()
+        boxSett.label(text="Blen2MOT Setup", icon='IMPORT')
+        boxFS = boxSett.box()
         boxFS.prop(scene, "folder_path", text="Export Folder", icon='EXPORT')
-        boxFS.prop(scene, "exe_path", text="MOTExporter", icon='FILE_SCRIPT')
+        boxFS.prop(scene, "exe_path", text="Blen2MOT Exe", icon='FILE_SCRIPT')
         boxFS.prop(scene, "bone_path", text="Bone File", icon='BONE_DATA')
         boxFS.prop(scene, "output", text="See the program output?", icon='HELP')
-        layout.separator()
         
         
+                
         
-        layout.label(text="MOT", icon='PREVIEW_RANGE')
-        boxMSA = layout.box()
-        boxMS = boxMSA.box()
-        boxMS.label(text="MOT Settings", icon='SETTINGS');
+        boxSett = layout.box()
         
-        boxMS.prop(scene, "loop", text="Animation loops?", icon='CONSTRAINT')
-        boxMS.prop(scene, "cutscene", text="Full Precision?", icon='OUTLINER_DATA_CAMERA')
+        boxSett.label(text="MOT", icon='PREVIEW_RANGE')
+        boxMSA = boxSett.box()
+        boxMSA.label(text="MOT Settings", icon='SETTINGS');
         
-        boxMSa1 = boxMS.box()
+        boxMSA.prop(scene, "loop", text="Animation loops?", icon='CONSTRAINT')
+        boxMSA.prop(scene, "cutscene", text="Full Precision?", icon='OUTLINER_DATA_CAMERA')
+        
+        boxMSa1 = boxMSA.box()
         chosen = "QUESTION"
 
 
@@ -564,52 +718,20 @@ class VIEW3D_PT_MOTPanel(Panel):
              
         boxMSa1.label(text="Current Mode: " + Mode, icon=chosen);
         
-        boxMS.operator("object.feet_action", text="Toggle Foot Rig", icon='RIGHTARROW_THIN')
+        boxMSA.operator("object.feet_action", text="Toggle Foot Rig", icon='RIGHTARROW_THIN')
         
-        boxMS.prop(scene, "bones_that_uses_ik", text="Foot bones", icon='MOD_ARMATURE')
+        boxMSA.prop(scene, "bones_that_uses_ik", text="Foot bones", icon='MOD_ARMATURE')
         
-        boxHI = boxMS.box()
-        boxHI.separator();
-        boxHI.label(text="Bone hierchary", icon='MOD_ARMATURE')
-        boxHI.separator();
-        
-        if armature_obj and armature_obj.type == 'ARMATURE':
-            bones = armature_obj.data.bones
-            
-            
-            
 
-
-            def print_bone_info(bone, level=0):
-                parent_index = -1 if bone.parent is None else bones.find(bone.parent.name)
-                bn = ""
-                if "root" in bone.name:
-                    bn = str(int(bone.name.replace("root", "0")) - 3)
-                else:
-                    if bone.name.isdigit():
-                       bn = str(int(bone.name) - 3)
-                    
-                    
-                boxHI.label(text=f"Bone: {bone.name}     |||     Level: {bn}");
-                boxHI.scale_y = 0.5
-                for child_bone in bone.children:
-                    print_bone_info(child_bone, level + 1)
-            for bone in bones:
-                if bone.parent is None:
-                    print_bone_info(bone)
-        else:
-            boxHI.label(text="Armature not found.");
         
-        boxHI.separator();
-        boxMS.separator()
-        boxMS = boxMSA.box()
+        boxMSA.separator()
+        boxSett.separator();
         
+        boxMS = boxSett.box()
+        boxMS.label(text="MOT Utility", icon='PREVIEW_RANGE');
+        boxMS.separator();
         
         boxMS1 = boxMS.box()
-        boxMS1.label(text="MOT Utility", icon='PREVIEW_RANGE');
-        boxMS1.separator();
-        
-        
         boxMS1.label(text="Keyframe Cleanup", icon='KEYFRAME');
         boxKFC = boxMS1.box()#keyframe clear. it's not KFC as the food.
         
@@ -638,26 +760,30 @@ class VIEW3D_PT_MOTPanel(Panel):
         rowMS.operator("pose.delete_z_scale", icon='ORIENTATION_GLOBAL');
         boxMS.operator("pose.delete_all_scale", icon='ORIENTATION_GLOBAL');
         
-
-        
-        boxMS1.label(text="Curve Cleanup", icon='FCURVE');
-        boxMS1 = boxMS1.box()
+        boxMS = boxMS1.box()
+        boxMS.label(text="Curve Cleanup", icon='FCURVE');
+        boxMS1 = boxMS.box()
         boxMS1.operator("pose.cleanup", icon='ORIENTATION_GLOBAL');
         boxMS1.prop(scene, "simplify_factor", text="Cleanup Factor")
         
         
-        
-        layout.label(text="MOT Info", icon='INFO');
-        boxIF = layout.box()
+        boxSett = layout.box()
+        boxSett.label(text="MOT Info", icon='INFO');
+        boxIF = boxSett.box()
         boxIF.prop(scene, "show_warning", text="", icon='ERROR')
-        layout.separator();
         
-        layout.label(text="MOT Exporting", icon='EXPORT')
-        boxEP = layout.box()
+        
+        boxSett = layout.box()
+        boxMS = boxSett.box()
+        boxMS.label(text="MOT File", icon='EXPORT')
+        boxEP = boxMS.box()
+        boxEP.operator("object.import_action", text="Import MOT", icon='PLAY')
         boxEP.operator("object.export_action", text="Export Animation to MOT", icon='PLAY')
+        boxSett.separator();
 
 
 def register():
+    bpy.utils.register_class(OBJECT_OT_Import)
     bpy.utils.register_class(OBJECT_OT_Export)
     bpy.utils.register_class(VIEW3D_PT_MOTPanel)
     bpy.utils.register_class(OBJECT_OT_FeetSetup)
@@ -737,6 +863,7 @@ def register():
 
 def unregister():
     bpy.utils.unregister_class(OBJECT_OT_Export)
+    bpy.utils.unregister_class(OBJECT_OT_Import)
     bpy.utils.unregister_class(OBJECT_OT_FeetSetup)
     bpy.utils.unregister_class(VIEW3D_PT_MOTPanel)
     bpy.utils.unregister_class(DAOperator) 
