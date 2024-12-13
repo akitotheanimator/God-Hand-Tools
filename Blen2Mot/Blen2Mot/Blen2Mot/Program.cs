@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -206,7 +206,7 @@ public static class Program
                         headers.Add(head);
                 }
 
-                using (StreamWriter writer = new StreamWriter(args[0].Replace(".mot", "_FTEMP.MFIL"),false, Encoding.ASCII))
+                using (StreamWriter writer = new StreamWriter(args[0].Replace(".mot", "_FTEMP.MFIL").Replace(".MOT", "_FTEMP.MFIL"), false, Encoding.ASCII))
                 {
 
                  
