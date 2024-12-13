@@ -1,6 +1,7 @@
 # God Hand Tools
 
 **This whole pack is made in C# frameworks 4.8**
+**some of the tools in this pack outputs SMD's. Install this addon for blender in order to import smd's on blender:** http://steamreview.org/BlenderSourceTools/
 
 I have lost acess to my old account so i made a new one.
 God Hand Tools's purpose is to bring people packs of tools to convert god hand files to more flexible and modern ones.
