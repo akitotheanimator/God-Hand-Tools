@@ -69,8 +69,9 @@ class OBJECT_OT_Import(Operator, ImportHelper):
         obj.animation_data.action = action  # This makes it the active action
         #print(filepath.replace(".mot","_FTEMP.MFIL"));
 
-        
-        with open(filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")) as file: #istg why is python built like that?
+        fileName = filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")
+        print("FILE NAME: " + fileName);
+        with open(fileName) as file: #istg why is python built like that?
            file_content = file.read()
            pSplit = file_content.split("\n")
            for line in pSplit:
@@ -98,6 +99,8 @@ class OBJECT_OT_Import(Operator, ImportHelper):
                  valueArray = []
                  for transformGet in splitTransform[1:]:
                    transformData = transformGet.split(",")
+                   print("DATA:" + transformData[0] + "|" + transformData[1] + "|" + transformData[2] + "|" + transformData[3]+".");
+                   
                    time = int(transformData[0]);
                    p0 = float(transformData[1]);
                    m0 = float(transformData[2]);
@@ -153,7 +156,7 @@ class OBJECT_OT_Import(Operator, ImportHelper):
                      
                      
                  bpy.context.scene.frame_end = valueArray[len(valueArray)-1][0]
-        os.remove(filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")) 
+        os.remove(fileName) 
                  
                  
 
