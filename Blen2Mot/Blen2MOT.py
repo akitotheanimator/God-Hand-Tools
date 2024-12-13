@@ -57,15 +57,20 @@ class OBJECT_OT_Import(Operator, ImportHelper):
         
         os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + filepath + '\" \"True\" \"' + context.scene.bone_path + "\"")
         
+        if obj is None:
+            print("No active object found.")
+    
+    
         if obj.animation_data is None:
-            obj.animation_data_create()  # Create the animation data block if it doesn't exist
+           obj.animation_data_create()
+
     
         action = bpy.data.actions.new(name=os.path.basename(filepath))
         obj.animation_data.action = action  # This makes it the active action
         #print(filepath.replace(".mot","_FTEMP.MFIL"));
 
         
-        with open(filepath.replace(".mot","_FTEMP.MFIL")) as file: #istg why is python built like that?
+        with open(filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")) as file: #istg why is python built like that?
            file_content = file.read()
            pSplit = file_content.split("\n")
            for line in pSplit:
@@ -148,7 +153,7 @@ class OBJECT_OT_Import(Operator, ImportHelper):
                      
                      
                  bpy.context.scene.frame_end = valueArray[len(valueArray)-1][0]
-        os.remove(filepath.replace(".mot","_FTEMP.MFIL")) 
+        os.remove(filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")) 
                  
                  
 
