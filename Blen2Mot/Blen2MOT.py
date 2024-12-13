@@ -14,6 +14,7 @@ from bpy.props import StringProperty, BoolProperty, FloatProperty,CollectionProp
 from bpy.types import Panel, Operator,OperatorFileListElement
 from bpy_extras.io_utils import ImportHelper
 import os
+import re
 
 
 class OBJECT_OT_Import(Operator, ImportHelper):
