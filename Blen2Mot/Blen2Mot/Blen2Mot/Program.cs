@@ -205,7 +205,6 @@ public static class Program
                     if (head.adress != 0 && head.adress < fs.Length && !GlobalTools.returnType(head.type).Contains("not computed."))
                         headers.Add(head);
                 }
-
                 using (StreamWriter writer = new StreamWriter(args[0].Replace(".mot", "_FTEMP.MFIL").Replace(".MOT", "_FTEMP.MFIL"), false, Encoding.ASCII))
                 {
 
@@ -295,7 +294,7 @@ public static class Program
                                     }
                                 }
                                 //Console.WriteLine(a.bone + "   " + queueNext);
-                                write += $"${timeAbsolute},{p0},{m0},{m1}";
+                                write += $"${(timeAbsolute + "").Replace(",", ".")},{(p0 + "").Replace(",", ".")},{(m0 + "").Replace(",", ".")},{(m1 + "").Replace(",", ".")}";
                             }
                         }
                         else
@@ -352,7 +351,7 @@ public static class Program
                                     }
                                 }
                                 //Console.WriteLine(a.bone + "   " + queueNext);
-                                write += $"${t},{p0},{m0},{m1}";
+                                write += $"${(t+"").Replace(",",".")},{(p0 + "").Replace(",",".")},{(m0 + "").Replace(",",".")},{(m1 + "").Replace(",",".")}";
                             }
                         }
                         writer.WriteLine(write);
