@@ -89,5 +89,14 @@ In this case, bone 28 is where the camera is located, and bone 29 is where the c
 * Make sure to always optimize the animation. Either using F-Curve addon or cleaning up the curves manually. I know it's harder manually but sometimes that's the best option.
 
 
+# Tutorials
+**Here are the basis tutorials of the toolpack**
+* T1-How to extract God Hand's dat file from the ISO and extract the dat contents: https://giphy.com/gifs/3I7f85WEJ4h7AHXjyP
+* T2-How to convert God Hand's md file to smd:
+* T3-How to convert God Hand's mot file to smd(follow this after T2):
+
+**Import the stuff on blender**
+* T4-How to import a md on Blender(follow this after T2):
+* How to import a mot on Blender(Using MOTool)(follow this after T4):
 
 # if you need anything contact me in discord srnoobi#3108!
