@@ -220,12 +220,14 @@ class OBJECT_OT_Export(Operator):
             
             self.report({'INFO'}, f"Processing F-Curve for bone: {bone_name}, Type: {fcurve_type}")
             for keyframe in fcurve.keyframe_points:
+                keyframe.handle_right_type = 'FREE'
+                keyframe.handle_left_type = 'FREE'
                 time = keyframe.co.x
                 value = keyframe.co.y
                 left_handle = keyframe.handle_left
                 right_handle = keyframe.handle_right
-                m0 = (value - left_handle.y) / (time - left_handle.x) if time != left_handle.x else 0
-                m1 = (right_handle.y - value) / (right_handle.x - time) if right_handle.x != time else 0
+                m0 = 3 * (value - left_handle.y)
+                m1 = 3 * (right_handle.y - value)
                 actionRet += str(time) + "^" +str(value) + "^"+ str(m0) + "^"+str(m1)+"^\n";
         actionRet+="finish"
         file_path = folder_path + "MOTTEMP" + action.name + ".txt"
