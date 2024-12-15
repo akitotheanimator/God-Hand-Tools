@@ -36,7 +36,11 @@ public static class MOTConvert
         motHeader.Sort((a, b) => a.bone.CompareTo(b.bone));
         GlobalTools.writeOnConsole("Sorting types...", ConsoleColor.Green);
         List<Header> sortedTypes = motHeader.GroupBy(x => x.bone).Select(g => g.OrderBy(x => x.type)).SelectMany(g => g).ToList();
-        GlobalTools.writeOnConsole("Exporting...", ConsoleColor.Green);
+        foreach (var h in sortedTypes)
+        {
+            h.recalculateType();
+        }
+            GlobalTools.writeOnConsole("Exporting...", ConsoleColor.Green);
         Export(Path.GetDirectoryName(exportPath) + "/" + animationName + ".MOT", sortedTypes.ToArray(),allTime);
     }
     public static void Export(string path, Header[] data,int allTime)
@@ -49,32 +53,28 @@ public static class MOTConvert
             GlobalTools.writeOnConsole("Writting header...", ConsoleColor.Yellow);
             bn.Write(862090349);
             bn.Write((ushort)allTime);
-            bn.Write((byte)(data.Length+1));
+            bn.Write((byte)(data.Length + 1));
 
-            bn.Write((byte)(Program.loops? 1 : 0));
+            bn.Write((byte)(Program.loops ? 1 : 0));
 
-            for(int i = 0; i < data.Length;i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 bn.Write((sbyte)data[i].bone);
-
-                if(data[i].bone == -1 && data[i].type == 17)
-                bn.Write((byte)1);
-                else
-                    bn.Write(data[i].type);
+                bn.Write(data[i].type);
 
 
-                bn.Write((ushort)(data[i].curves.Length+1));
-                if(Program.IKBones.Length > 0)
+                bn.Write((ushort)(data[i].curves.Length + 1));
+                if (Program.IKBones.Length > 0)
                 {
                     int match = 0;
-                    foreach(var ik in Program.IKBones)
+                    foreach (var ik in Program.IKBones)
                     {
                         if (ik == data[i].bone)
                         {
                             match++; bn.Write((int)1); break;
                         }
                     }
-                    if(match == 0)
+                    if (match == 0)
                     {
                         bn.Write((int)0);
                     }
@@ -84,25 +84,26 @@ public static class MOTConvert
                 {
                     bn.Write((int)0);
                 }
-                if (data[i].bone == -1 && data[i].type == 17)
+                if (data[i].type < 10)
                 {
+                    bn.Write((float)data[i].oP[0]);
                 }
                 else
                 {
                     AdressOffset.Add((uint)fs.Position);
+                    bn.Write((int)0);
                 }
-                bn.Write((int)0);
+                
             }
             bn.Write((long)4294967167);
             bn.Write((int)0);
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
             GlobalTools.writeOnConsole("Writting keyframe data...", ConsoleColor.Yellow);
-            for (int i = 0; i < data.Length;i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                if (data[i].bone == -1 && data[i].type == 17)
+                if (data[i].type > 10)
                 {
-                }else
-                {
+
                     Offsets.Add((uint)fs.Position);
                     if (data[i].type < 80)
                     {
@@ -113,7 +114,7 @@ public static class MOTConvert
                         bn.Write(data[i].m1);
                         bn.Write(data[i].dm1);
                     }
-                    
+
                     for (int o = 0; o < data[i].curves.Length; o++)
                     {
                         if (data[i].type < 80)
@@ -122,7 +123,8 @@ public static class MOTConvert
                             bn.Write(data[i].curves[o].cp);
                             bn.Write(data[i].curves[o].cm0);
                             bn.Write(data[i].curves[o].cm1);
-                        } else
+                        }
+                        else
                         {
                             bn.Write(data[i].curves[o].ABTime);
                             bn.Write((ushort)65535);
@@ -131,6 +133,7 @@ public static class MOTConvert
                             bn.Write(data[i].curves[o].m1);
                         }
                     }
+
                 }
             }
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
@@ -143,7 +146,7 @@ public static class MOTConvert
             {
                 fs.Position = AdressOffset[i];
                 //Console.WriteLine(data[i].bone + "  " + data[i].type);
-                    bn.Write(Offsets[i]);
+                bn.Write(Offsets[i]);
             }
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
         }
