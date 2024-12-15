@@ -190,6 +190,11 @@ public static class Program
                 ushort totalFrameCount = GlobalTools.readValue(fs, bnr, 4, GlobalTools.NumberType.USHORT);
                 byte totalPropertyCount = GlobalTools.readValue(fs, bnr, 6, GlobalTools.NumberType.BYTE);
                 byte Loops = GlobalTools.readValue(fs, bnr, 7, GlobalTools.NumberType.BYTE);
+
+
+
+
+
                 List<Header> headers = new List<Header>();
                 #region get headers n stuff
                 for (long i = 8; i < (long)((totalPropertyCount * 12) +8); i += 12)
@@ -197,12 +202,16 @@ public static class Program
                     Header head = new Header();
                     head.bone = GlobalTools.readValue(fs, bnr, i + 0, GlobalTools.NumberType.SBYTE);
                     head.type = GlobalTools.readValue(fs, bnr, i + 1, GlobalTools.NumberType.BYTE);
+                    Console.WriteLine(head.type);
                     head.keyframeCount = GlobalTools.readValue(fs, bnr, i + 2, GlobalTools.NumberType.USHORT);
                     head.usesRootSpace = GlobalTools.readValue(fs, bnr, i + 4, GlobalTools.NumberType.UINT);
-                    head.adress = GlobalTools.readValue(fs, bnr, i + 8, GlobalTools.NumberType.UINT);
+                    if (head.type > 10)
+                        head.adress = GlobalTools.readValue(fs, bnr, i + 8, GlobalTools.NumberType.UINT);
+                    else
+                        head.oP = new float[1] { GlobalTools.readValue(fs, bnr, i + 8, GlobalTools.NumberType.SINGLE) };
                     //Console.WriteLine(head.adress + "   " + i);
                     //if(head.keyframeCount != 65535)
-                    if (head.adress != 0 && head.adress < fs.Length && !GlobalTools.returnType(head.type).Contains("not computed."))
+                    if (!GlobalTools.returnType(head.type).Contains("not computed."))
                         headers.Add(head);
                 }
                 using (StreamWriter writer = new StreamWriter(args[0].Replace(".mot", "_FTEMP.MFIL").Replace(".MOT", "_FTEMP.MFIL"), false, Encoding.ASCII))
@@ -211,105 +220,150 @@ public static class Program
                  
                     #endregion
                     List<(int,bool)> queueList = new List<(int, bool)>();
-                    foreach (var a in headers)
+                    for (int i = 0; i < headers.Count;i++)
                     {
                         //quantized data + the keyframe count
-                        string write = a.bone + "|" + GlobalTools.returnType(a.type) + "|";
+                        string write = headers[i].bone + "|" + GlobalTools.returnType(headers[i].type) + "|";
 
-                        fs.Position = a.adress;
-                        if(a.type < 80) {
-                        float PMin = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 0, GlobalTools.NumberType.USHORT));
-                        float PMax = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 2, GlobalTools.NumberType.USHORT));
+                        fs.Position = headers[i].adress;
+                        if(headers[i].type < 80) {
 
-                        float M0Min = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 4, GlobalTools.NumberType.USHORT));
-                        float M0Max = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 6, GlobalTools.NumberType.USHORT));
-
-                        float M1Min = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 8, GlobalTools.NumberType.USHORT));
-                        float M1Max = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, a.adress + 10, GlobalTools.NumberType.USHORT));
-
-                        if (a.usesRootSpace != 0)
-                        {
-                            queueList.Add((a.bone+3,false));
-                        }
-                        for (int o = 0; o < queueList.Count; o++)
-                        {
-                            if (queueList[o].Item2 == true && queueList[o].Item1 != a.bone)
+                            if (headers[i].usesRootSpace != 0)
                             {
-                                queueList.Remove(queueList[o]);
-                                o -= 1;
+                                queueList.Add((headers[i].bone + 3, false));
                             }
-                        }
-                            uint timeAbsolute = 0;
-
-                            for (long i = a.adress + 12; i < a.adress + (12 + (a.keyframeCount * 4)); i += 4)
+                            for (int o = 0; o < queueList.Count; o++)
                             {
-                                timeAbsolute += GlobalTools.readValue(fs, bnr, i + 0, GlobalTools.NumberType.BYTE);
-                                float p0 = PMin + PMax * GlobalTools.readValue(fs, bnr, i + 1, GlobalTools.NumberType.BYTE);
-                                float m0 = M0Min + M0Max * GlobalTools.readValue(fs, bnr, i + 2, GlobalTools.NumberType.BYTE);
-                                float m1 = M1Min + M1Max * GlobalTools.readValue(fs, bnr, i + 3, GlobalTools.NumberType.BYTE);
+                                if (queueList[o].Item2 == true && queueList[o].Item1 != headers[i].bone)
+                                {
+                                    queueList.Remove(queueList[o]);
+                                    o -= 1;
+                                }
+                            }
 
-                                //Console.WriteLine(a.bone + "      " + (a.bone + 1) +"   " + bones[a.bone + 1].pos + "    " + a.usesRootSpace);
+
+                                                           
+                            if (headers[i].type > 10)
+                            {
+                                float PMin = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 0, GlobalTools.NumberType.USHORT));
+                                float PMax = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 2, GlobalTools.NumberType.USHORT));
+
+                                float M0Min = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 4, GlobalTools.NumberType.USHORT));
+                                float M0Max = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 6, GlobalTools.NumberType.USHORT));
+
+                                float M1Min = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 8, GlobalTools.NumberType.USHORT));
+                                float M1Max = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 10, GlobalTools.NumberType.USHORT));
+
+                                uint timeAbsolute = 0;
+
+                                for (long c = headers[i].adress + 12; c < headers[i].adress + (12 + (headers[i].keyframeCount * 4)); c += 4)
+                                {
+                                    timeAbsolute += GlobalTools.readValue(fs, bnr, c + 0, GlobalTools.NumberType.BYTE);
+                                    float p0 = PMin + PMax * GlobalTools.readValue(fs, bnr, c + 1, GlobalTools.NumberType.BYTE);
+                                    float m0 = M0Min + M0Max * GlobalTools.readValue(fs, bnr, c + 2, GlobalTools.NumberType.BYTE);
+                                    float m1 = M1Min + M1Max * GlobalTools.readValue(fs, bnr, c + 3, GlobalTools.NumberType.BYTE);
+
+                                    //Console.WriteLine(a.bone + "      " + (a.bone + 1) +"   " + bones[a.bone + 1].pos + "    " + a.usesRootSpace);
+                                    int matches = 0;
+                                    for (int o = 0; o < queueList.Count; o++)
+                                    {
+                                        if (queueList[o].Item1 == headers[i].bone + 1)
+                                        {
+                                            matches++;
+                                            //Console.WriteLine(a.bone + "   " + a.type);
+                                            var f = queueList[o];
+                                            f.Item2 = true;
+                                            queueList[o] = f;
+
+                                            switch (headers[i].type)
+                                            {
+                                                case 16:
+                                                    p0 = bones[0].pos.X + p0; break;
+                                                case 17:
+                                                    p0 = bones[0].pos.Y + p0; break;
+                                                case 18:
+                                                    p0 = bones[0].pos.Z + p0; break;
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    if (matches == 0)
+                                    {
+                                        switch (headers[i].type)
+                                        {
+                                            case 16:
+                                                p0 -= bones[headers[i].bone + 1].pos.X;
+                                                break;
+                                            case 17:
+                                                p0 -= bones[headers[i].bone + 1].pos.Y;
+                                                break;
+                                            case 18:
+                                                p0 -= bones[headers[i].bone + 1].pos.Z;
+                                                break;
+                                        }
+                                    }
+                                    write += $"${(timeAbsolute + "").Replace(",", ".")},{(p0 + "").Replace(",", ".")},{(m0 + "").Replace(",", ".")},{(m1 + "").Replace(",", ".")}";
+                                }
+                            } else
+                            {
+                                float zero = 0;
+                                float v = headers[i].oP[0];
+
+
                                 int matches = 0;
                                 for (int o = 0; o < queueList.Count; o++)
                                 {
-                                    if (queueList[o].Item1 == a.bone + 1)
+                                    if (queueList[o].Item1 == headers[i].bone + 1)
                                     {
                                         matches++;
-                                        //Console.WriteLine(a.bone + "   " + a.type);
                                         var f = queueList[o];
                                         f.Item2 = true;
                                         queueList[o] = f;
 
-                                        switch (a.type)
+                                        switch (headers[i].type)
                                         {
-                                            case 16:
-                                                p0 = bones[0].pos.X + p0; break;
-                                            case 17:
-                                                p0 = bones[0].pos.Y + p0; break;
-                                            case 18:
-                                                p0 = bones[0].pos.Z + p0; break;
+                                            case 0:
+                                                v = bones[0].pos.X + v; break;
+                                            case 1:
+                                                v = bones[0].pos.Y + v; break;
+                                            case 2:
+                                                v = bones[0].pos.Z + v; break;
                                         }
                                         break;
                                     }
                                 }
                                 if (matches == 0)
                                 {
-                                    switch (a.type)
+
+                                    switch (headers[i].type)
                                     {
-                                        case 16:
-                                            p0 -= bones[a.bone + 1].pos.X;
+                                        case 0:
+                                            v -= bones[headers[i].bone + 1].pos.X;
                                             break;
-                                        case 17:
-                                            p0 -= bones[a.bone + 1].pos.Y;
+                                        case 1:
+                                            v -= bones[headers[i].bone + 1].pos.Y;
                                             break;
-                                        case 18:
-                                            p0 -= bones[a.bone + 1].pos.Z;
+                                        case 2:
+                                            v -= bones[headers[i].bone + 1].pos.Z;
                                             break;
-                                        case 80:
-                                            p0 += bones[a.bone + 1].pos.X; break;
-                                        case 81:
-                                            p0 += bones[a.bone + 1].pos.Y; break;
-                                        case 82:
-                                            p0 += bones[a.bone + 1].pos.Z; break;
                                     }
                                 }
-                                //Console.WriteLine(a.bone + "   " + queueNext);
-                                write += $"${(timeAbsolute + "").Replace(",", ".")},{(p0 + "").Replace(",", ".")},{(m0 + "").Replace(",", ".")},{(m1 + "").Replace(",", ".")}";
+                                write += $"${(zero + "").Replace(",", ".")},{(v + "").Replace(",", ".")},{(zero + "").Replace(",", ".")},{(zero + "").Replace(",", ".")}";
                             }
                         }
                         else
                         {
-                            for (long i = a.adress; i < a.adress + (a.keyframeCount * 16); i += 16)
+                            for (long c = headers[i].adress; i < headers[i].adress + (headers[i].keyframeCount * 16); c += 16)
                             {
-                                ushort t = GlobalTools.readValue(fs, bnr, i + 0, GlobalTools.NumberType.USHORT);
-                                float p0 = GlobalTools.readValue(fs, bnr, i + 4, GlobalTools.NumberType.SINGLE);
-                                float m0 = GlobalTools.readValue(fs, bnr, i + 8, GlobalTools.NumberType.SINGLE);
-                                float m1 = GlobalTools.readValue(fs, bnr, i + 12, GlobalTools.NumberType.SINGLE);
+                                ushort t = GlobalTools.readValue(fs, bnr, c + 0, GlobalTools.NumberType.USHORT);
+                                float p0 = GlobalTools.readValue(fs, bnr, c + 4, GlobalTools.NumberType.SINGLE);
+                                float m0 = GlobalTools.readValue(fs, bnr, c + 8, GlobalTools.NumberType.SINGLE);
+                                float m1 = GlobalTools.readValue(fs, bnr, c + 12, GlobalTools.NumberType.SINGLE);
 
                                 int matches = 0;
                                 for (int o = 0; o < queueList.Count; o++)
                                 {
-                                    if (queueList[o].Item1 == a.bone + 1)
+                                    if (queueList[o].Item1 == headers[i].bone + 1)
                                     {
                                         matches++;
                                         //Console.WriteLine(a.bone + "   " + a.type);
@@ -317,7 +371,7 @@ public static class Program
                                         f.Item2 = true;
                                         queueList[o] = f;
 
-                                        switch (a.type)
+                                        switch (headers[i].type)
                                         {
                                             case 16:
                                                 p0 = bones[0].pos.X + p0; break;
@@ -331,23 +385,23 @@ public static class Program
                                 }
                                 if (matches == 0)
                                 {
-                                    switch (a.type)
+                                    switch (headers[i].type)
                                     {
                                         case 16:
-                                            p0 -= bones[a.bone + 1].pos.X;
+                                            p0 -= bones[headers[i].bone + 1].pos.X;
                                             break;
                                         case 17:
-                                            p0 -= bones[a.bone + 1].pos.Y;
+                                            p0 -= bones[headers[i].bone + 1].pos.Y;
                                             break;
                                         case 18:
-                                            p0 -= bones[a.bone + 1].pos.Z;
+                                            p0 -= bones[headers[i].bone + 1].pos.Z;
                                             break;
                                         case 80:
-                                            p0 += bones[a.bone + 1].pos.X; break;
+                                            p0 += bones[headers[i].bone + 1].pos.X; break;
                                         case 81:
-                                            p0 += bones[a.bone + 1].pos.Y; break;
+                                            p0 += bones[headers[i].bone + 1].pos.Y; break;
                                         case 82:
-                                            p0 += bones[a.bone + 1].pos.Z; break;
+                                            p0 += bones[headers[i].bone + 1].pos.Z; break;
                                     }
                                 }
                                 //Console.WriteLine(a.bone + "   " + queueNext);
