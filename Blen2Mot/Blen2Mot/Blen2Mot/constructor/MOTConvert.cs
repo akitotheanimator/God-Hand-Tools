@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -135,6 +135,10 @@ public static class MOTConvert
             }
             GlobalTools.writeOnConsole("done!", ConsoleColor.Green);
             GlobalTools.writeOnConsole("Writting calculated offsets...", ConsoleColor.Yellow);
+            while (fs.Position % 16 != 0)
+            {
+                bn.Write((byte)0);
+            }
             for (int i = 0; i < AdressOffset.Count; i++)
             {
                 fs.Position = AdressOffset[i];
