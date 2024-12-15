@@ -25,7 +25,7 @@ namespace FILE_MANAGING
                 {
                     type = "PACKED_MAP";
                 }
-                if (readValue(fs, br, readValue(fs, br, 8, NumberType.USHORT), NumberType.STRING).ToString().Contains("el"))
+                if (readValue(fs, br, 4, NumberType.UINT) == 96)
                 {
                     type = "PACKED_EVENT"; //used in cutscenes
                 }
