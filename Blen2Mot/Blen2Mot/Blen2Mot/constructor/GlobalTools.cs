@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,6 +93,17 @@ public static class GlobalTools
         string returner = $"not computed.{tp}";
         switch (tp)
         {
+            case 0:
+                returner = "location.x";
+                break;
+            case 1:
+                returner = "location.y";
+                break;
+            case 2:
+                returner = "location.z";
+                break;
+
+
             case 16:
                 returner = "location.x";
                 break;
@@ -102,6 +113,20 @@ public static class GlobalTools
             case 18:
                 returner = "location.z";
                 break;
+
+
+            case 3:
+                returner = "rotation_euler.x";
+                break;
+            case 4:
+                returner = "rotation_euler.y";
+                break;
+            case 5:
+                returner = "rotation_euler.z";
+                break;
+
+
+
             case 19:
                 returner = "rotation_euler.x";
                 break;
@@ -111,6 +136,9 @@ public static class GlobalTools
             case 21:
                 returner = "rotation_euler.z";
                 break;
+
+
+
             case 22:
                 returner = "scale.x";
                 break;
