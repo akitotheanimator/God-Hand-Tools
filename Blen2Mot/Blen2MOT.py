@@ -65,65 +65,83 @@ class OBJECT_OT_Import(Operator, ImportHelper):
            obj.animation_data_create()
 
     
-        action = bpy.data.actions.new(name=os.path.basename(filepath))
+        action = bpy.data.actions.new(name=os.path.basename(filepath).replace('.mot','').replace('.MOT',''))
         obj.animation_data.action = action  # This makes it the active action
+        bpy.context.scene.frame_current = 0
         #print(filepath.replace(".mot","_FTEMP.MFIL"));
 
-        fileName = filepath.replace(".mot","_FTEMP.MFIL").replace(".MOT","_FTEMP.MFIL")
+        fileName = filepath.replace(".mot",".BTE0").replace(".MOT",".BTE0")
+        absTime = 0;
         print("FILE NAME: " + fileName);
-        with open(fileName) as file: #istg why is python built like that?
-           file_content = file.read()
-           pSplit = file_content.split("\n")
-           for line in pSplit:
+        with open(fileName, 'rb') as file: #istg why is python built like that?
+           countByte = struct.unpack('I', file.read(4))[0]
+           for ca in range(0, countByte, 1):
+               
+           
+                 boneByte = struct.unpack('b', file.read(1))[0]+1
+                 typeByte = struct.unpack('B', file.read(1))[0]
+                 animationCountByte = struct.unpack('I', file.read(4))[0]
+                
                
                
-               if line.split("|")[0] != "" :
-                 boneInt = int(line.split("|")[0]) + 1
-                 boneGet = str(boneInt);
-                 if boneInt == 0: 
-                   boneGet = "root"
-                   
-                   
+                 boneGet = str(boneByte);
+                 if boneByte == 0: 
+                       boneGet = "root"
                  bone = obj.pose.bones.get(str(boneGet))
                  boneName = str(boneGet)
                  group = None
                  for existing_group in bpy.context.object.animation_data.action.groups:
-                     if existing_group.name == boneName:
-                        group = existing_group
-                        break
+                       if existing_group.name == boneName:
+                          group = existing_group
+                          break
                  if not group:
-                        group = bpy.context.object.animation_data.action.groups.new(name=boneName)
-               
-                 transform = line.split("|")[1]
-                 splitTransform = line.split("$")
+                          group = bpy.context.object.animation_data.action.groups.new(name=boneName)
                  valueArray = []
-                 for transformGet in splitTransform[1:]:
-                   transformData = transformGet.split(",")
-                   print("DATA:" + transformData[0] + "|" + transformData[1] + "|" + transformData[2] + "|" + transformData[3]+".");
-                   
-                   time = int(transformData[0]);
-                   p0 = float(transformData[1]);
-                   m0 = float(transformData[2]);
-                   m1 = float(transformData[3]);
-                   valueArray.append([time, p0, m0, m1])  # Add p0, m0, m1 to the list
-                   
+                 transform = ""
+                 if typeByte == 16 or typeByte == 0 or typeByte == 80:
+                      transform = "location.x"
+                 if typeByte == 17 or typeByte == 1 or typeByte == 81:
+                      transform = "location.y"
+                 if typeByte == 18 or typeByte == 2 or typeByte == 82:
+                      transform = "location.z"
+                      
+                 if typeByte == 19 or typeByte == 3 or typeByte == 83:
+                      transform = "rotation_euler.x"
+                 if typeByte == 20 or typeByte == 4 or typeByte == 84:
+                      transform = "rotation_euler.y"
+                 if typeByte == 21 or typeByte == 5 or typeByte == 85:
+                      transform = "rotation_euler.z"
+                      
+                      
+                 for ca2 in range(0, animationCountByte, 4):
+                      timeUInt = struct.unpack('I', file.read(4))[0]
+                      if absTime < timeUInt:
+                          absTime = timeUInt
+                      #print(timeUInt);
+                      p0Float = struct.unpack('f', file.read(4))[0]
+                      m0Float = struct.unpack('f', file.read(4))[0]
+                      m1Float = struct.unpack('f', file.read(4))[0]
+                      
+                      valueArray.append([timeUInt, p0Float, m0Float, m1Float])  # Add p0, m0, m1 to the list
+                      
                  transformN = transform.replace(".x","").replace(".y","").replace(".z","")
                  iType = 0;
-
-                       
-
                  for i in range(0, len(valueArray), 1):
                      p0 = valueArray[i][1]
                      if "location" in transform:
                           bone.location.x = p0
                      else:
                           bone.rotation_euler.x = p0
+                          
+                          
                      if "y" in transform: 
                          if "location" in transform:
                              bone.location.y = p0
                          else:
                              bone.rotation_euler.y = p0
                          iType = 1
+                         
+                         
                      if "z" in transform:
                          if "location" in transform:
                              bone.location.z = p0
@@ -153,9 +171,7 @@ class OBJECT_OT_Import(Operator, ImportHelper):
                  p0 = valueArray[len(fcurve.keyframe_points)-1][1]
                  m1 = valueArray[len(fcurve.keyframe_points)-1][3]
                  fcurve.keyframe_points[len(fcurve.keyframe_points)-1].handle_right.y = p0 + m1/3
-                     
-                     
-                 bpy.context.scene.frame_end = valueArray[len(valueArray)-1][0]
+                 bpy.context.scene.frame_end = absTime
         os.remove(fileName) 
                  
                  
