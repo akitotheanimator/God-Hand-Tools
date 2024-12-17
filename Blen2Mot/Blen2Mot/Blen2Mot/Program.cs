@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,7 @@ public static class Program
 
     public static BONES[] bones;
 
-   
+
     static void Main(string[] args)
     {
 
@@ -152,7 +152,8 @@ public static class Program
                     {
                         Console.WriteLine("WARNING: Root bone has animated rotation. The program will ignore the root bone rotation curves to avoid the animation to break entirely.\nPress any key to continue.");
                         Console.ReadLine();
-                    } else
+                    }
+                    else
                     {
                         data.Add(h);
                     }
@@ -204,12 +205,11 @@ public static class Program
 
                 List<Header> headers = new List<Header>();
                 #region get headers n stuff
-                for (long i = 8; i < (long)((totalPropertyCount * 12) +8); i += 12)
+                for (long i = 8; i < (long)((totalPropertyCount * 12) + 8); i += 12)
                 {
                     Header head = new Header();
                     head.bone = GlobalTools.readValue(fs, bnr, i + 0, GlobalTools.NumberType.SBYTE);
                     head.type = GlobalTools.readValue(fs, bnr, i + 1, GlobalTools.NumberType.BYTE);
-                    Console.WriteLine(head.type);
                     head.keyframeCount = GlobalTools.readValue(fs, bnr, i + 2, GlobalTools.NumberType.USHORT);
                     head.usesRootSpace = GlobalTools.readValue(fs, bnr, i + 4, GlobalTools.NumberType.UINT);
                     if (head.type > 10)
@@ -221,19 +221,27 @@ public static class Program
                     if (!GlobalTools.returnType(head.type).Contains("not computed."))
                         headers.Add(head);
                 }
-                using (StreamWriter writer = new StreamWriter(args[0].Replace(".mot", "_FTEMP.MFIL").Replace(".MOT", "_FTEMP.MFIL"), false, Encoding.ASCII))
+                using (FileStream fs1 = new FileStream(args[0].Replace(".mot", ".BTE0").Replace(".MOT", ".BTE0"), FileMode.Create))
+                using (BinaryWriter bw1 = new BinaryWriter(fs1))
                 {
 
-                 
+
                     #endregion
-                    List<(int,bool)> queueList = new List<(int, bool)>();
-                    for (int i = 0; i < headers.Count;i++)
+                    List<(int, bool)> queueList = new List<(int, bool)>();
+                    bw1.Write(headers.Count);
+                    for (int i = 0; i < headers.Count; i++)
                     {
                         //quantized data + the keyframe count
-                        string write = headers[i].bone + "|" + GlobalTools.returnType(headers[i].type) + "|";
+                        //bw1.Write((byte)254);
+                        bw1.Write(headers[i].bone);
+                        bw1.Write(headers[i].type);
+                        long psL = fs1.Position;
+                        bw1.Write(0);
+                        List<dynamic> vals = new List<dynamic>();
 
                         fs.Position = headers[i].adress;
-                        if(headers[i].type < 80) {
+                        if (headers[i].type < 80)
+                        {
 
                             if (headers[i].usesRootSpace != 0)
                             {
@@ -247,9 +255,6 @@ public static class Program
                                     o -= 1;
                                 }
                             }
-
-
-                                                           
                             if (headers[i].type > 10)
                             {
                                 float PMin = IEEEBinary16.FromUShort(GlobalTools.readValue(fs, bnr, headers[i].adress + 0, GlobalTools.NumberType.USHORT));
@@ -309,9 +314,14 @@ public static class Program
                                                 break;
                                         }
                                     }
-                                    write += $"${(timeAbsolute + "").Replace(",", ".")},{(p0 + "").Replace(",", ".")},{(m0 + "").Replace(",", ".")},{(m1 + "").Replace(",", ".")}";
+
+                                    vals.Add(timeAbsolute);
+                                    vals.Add(p0);
+                                    vals.Add(m0);
+                                    vals.Add(m1);
                                 }
-                            } else
+                            }
+                            else
                             {
                                 float zero = 0;
                                 float v = headers[i].oP[0];
@@ -355,7 +365,10 @@ public static class Program
                                             break;
                                     }
                                 }
-                                write += $"${(zero + "").Replace(",", ".")},{(v + "").Replace(",", ".")},{(zero + "").Replace(",", ".")},{(zero + "").Replace(",", ".")}";
+                                vals.Add(zero);
+                                vals.Add(v);
+                                vals.Add(zero);
+                                vals.Add(zero);
                             }
                         }
                         else
@@ -411,16 +424,32 @@ public static class Program
                                             p0 += bones[headers[i].bone + 1].pos.Z; break;
                                     }
                                 }
-                                //Console.WriteLine(a.bone + "   " + queueNext);
-                                write += $"${(t+"").Replace(",",".")},{(p0 + "").Replace(",",".")},{(m0 + "").Replace(",",".")},{(m1 + "").Replace(",",".")}";
+
+                                vals.Add(t);
+                                vals.Add(p0);
+                                vals.Add(m0);
+                                vals.Add(m1);
                             }
                         }
-                        writer.WriteLine(write);
+
+                        long bk = fs1.Position;
+                        fs1.Position = psL;
+                        bw1.Write(vals.Count);
+                        fs1.Position = bk;
+                        for (int g = 0; g < vals.Count; g+=4)
+                        {
+                            bw1.Write((uint)vals[g]);
+                            bw1.Write((float)vals[g+1]);
+                            bw1.Write((float)vals[g+2]);
+                            bw1.Write((float)vals[g+3]);
+                        }
+                        vals.Clear();
                     }
-                    writer.Close();
+                    fs1.Close();
                 }
             }
         }
+        //Console.ReadLine();
     }
     public static byte returnType(string identifier)
     {
