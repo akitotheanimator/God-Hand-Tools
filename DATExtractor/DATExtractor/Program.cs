@@ -24,14 +24,20 @@ public static class Program
                 string[] allFiles = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
                 for (int i = 0; i < allFiles.Length; i++)
                 {
-                    dir.Add(allFiles[i].Replace("\"",""));
-                    Console.WriteLine($"Added {allFiles[i]} from {path} to the queue list.");
+                    if (!allFiles[i].Contains("_extacted"))
+                    {
+                        dir.Add(allFiles[i].Replace("\"", ""));
+                        Console.WriteLine($"Added {allFiles[i]} from {path} to the queue list.");
+                    }
                 }
             }
             else
             {
-                Console.WriteLine($"Added {path} to the queue list.");
-                dir.Add(path.Replace("\"", ""));
+                if (!path.Contains("_extacted"))
+                {
+                    Console.WriteLine($"Added {path} to the queue list.");
+                    dir.Add(path.Replace("\"", ""));
+                }
             }
         }
         else
@@ -44,14 +50,20 @@ public static class Program
                     string[] allFiles = Directory.GetFiles(args[i], "*.*", SearchOption.AllDirectories);
                     for (int f = 0; f < allFiles.Length; f++)
                     {
-                        dir.Add(allFiles[f].Replace("\"", ""));
-                        Console.WriteLine($"Added {allFiles[f]} from {args[i]} to the queue list.");
+                        if (!allFiles[f].Contains("_extacted"))
+                        {
+                            dir.Add(allFiles[f].Replace("\"", ""));
+                            Console.WriteLine($"Added {allFiles[f]} from {args[i]} to the queue list.");
+                        }
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Added {args[i]} to the queue list.");
-                    dir.Add(args[i].Replace("\"", ""));
+                    if (!args[i].Contains("_extacted"))
+                    {
+                        Console.WriteLine($"Added {args[i]} to the queue list.");
+                        dir.Add(args[i].Replace("\"", ""));
+                    }
 
                 }
             }
