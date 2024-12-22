@@ -15,7 +15,7 @@ from bpy.types import Panel, Operator,OperatorFileListElement
 from bpy_extras.io_utils import ImportHelper
 import os
 import re
-
+import struct
 
 class OBJECT_OT_Import(Operator, ImportHelper):
     bl_idname = "object.import_action"
@@ -46,9 +46,6 @@ class OBJECT_OT_Import(Operator, ImportHelper):
       bpy.ops.object.mode_set(mode='POSE')
       bpy.ops.pose.select_all(action='SELECT')
       bpy.ops.pose.rotation_mode_set(type='XYZ')
-      bpy.ops.pose.rot_clear()
-      bpy.ops.pose.loc_clear()
-      bpy.ops.pose.scale_clear()
       bpy.ops.pose.select_all(action='DESELECT')      
       directory = self.directory
       for file in self.files:
@@ -180,9 +177,6 @@ class OBJECT_OT_Import(Operator, ImportHelper):
       bpy.ops.object.mode_set(mode='POSE')
       bpy.ops.pose.select_all(action='SELECT')
       bpy.ops.pose.rotation_mode_set(type='XYZ')
-      bpy.ops.pose.rot_clear()
-      bpy.ops.pose.loc_clear()
-      bpy.ops.pose.scale_clear()
       self.report({'INFO'}, f"Selected file: {filepath}")
       return {'FINISHED'}
     
@@ -258,7 +252,7 @@ class OBJECT_OT_Export(Operator):
         self.report({'WARNING'}, 'start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
         
         os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\" \"False\"')
-        #os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args)
+        #os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args+ ' ' + str(False ))  
         
         self.report({'INFO'}, "Export complete.")
         return {'FINISHED'}
@@ -809,10 +803,64 @@ class VIEW3D_PT_MOTPanel(Panel):
         boxSett.separator();
 
 
+
+
+
+class Types(bpy.types.PropertyGroup):
+    typeEnum: bpy.props.EnumProperty(
+        name="Event type",
+        description="Select an type",
+        items=[
+            ('OPTION_A', "PLAYSOUND_EVENT", "Plays a sound at a certain frame of the animation."),
+            ('OPTION_B', "Option B", "This is option B"),
+            ('OPTION_C', "Option C", "This is option C"),
+        ],
+        default='OPTION_A',
+    )
+
+    
+    
+class VIEW3D_PT_SEQPanel(Panel):
+    bl_label = "SEQTool"
+    bl_idname = "VIEW3D_PT_STP"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'MOT'
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene   
+        
+        
+        
+        
+        
+        
+        layout.separator()
+        layout.label(text="Events:")
+        box1 = layout.box()
+        if scene.timeline_markers:
+            for marker in scene.timeline_markers:
+                boxSett = box1.box()
+                boxSett.label(text=f"Event: {marker.name}:     at    Frame: {marker.frame}")
+        else:
+            box1.label(text="No events found.")
+            
+        layout.separator()
+        layout.separator()
+        box1 = layout.box()
+        box1.operator("object.import_action", text="Create Frame Event of type:", icon='PLAY')
+        typeID = scene.typeID
+        box1.prop(typeID, "typeEnum")
+        layout.separator()
+        box1 = layout.box()
+        box1.operator("object.import_action", text=" :", icon='PLAY')
+        
+        
 def register():
     bpy.utils.register_class(OBJECT_OT_Import)
     bpy.utils.register_class(OBJECT_OT_Export)
     bpy.utils.register_class(VIEW3D_PT_MOTPanel)
+    bpy.utils.register_class(VIEW3D_PT_SEQPanel)
     bpy.utils.register_class(OBJECT_OT_FeetSetup)
     bpy.utils.register_class(DXOperator)
     bpy.utils.register_class(DYOperator)
@@ -884,14 +932,17 @@ def register():
     bpy.types.Scene.simplify_factor = FloatProperty(
         name="Simplify Factor",
         description="The factor of curve cleanup you want in the animation",
-        default=0.1
+        default=0.02
     )
     bpy.utils.register_class(CleanupOperator)
+    bpy.utils.register_class(Types)
+    bpy.types.Scene.typeID = bpy.props.PointerProperty(type=Types)
 
 def unregister():
     bpy.utils.unregister_class(OBJECT_OT_Export)
     bpy.utils.unregister_class(OBJECT_OT_Import)
     bpy.utils.unregister_class(OBJECT_OT_FeetSetup)
+    bpy.utils.unregister_class(VIEW3D_PT_SEQPanel)
     bpy.utils.unregister_class(VIEW3D_PT_MOTPanel)
     bpy.utils.unregister_class(DAOperator) 
     bpy.utils.unregister_class(DXOperator)
@@ -915,5 +966,8 @@ def unregister():
     del bpy.types.Scene.bones_that_uses_ik
     del bpy.types.Scene.show_warning
     del bpy.types.Scene.output
+    bpy.utils.unregister_class(Types) 
+    del bpy.types.Scene.typeID
 if __name__ == "__main__":
     register()
+ 
