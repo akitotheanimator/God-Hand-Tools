@@ -46,6 +46,9 @@ class OBJECT_OT_Import(Operator, ImportHelper):
       bpy.ops.object.mode_set(mode='POSE')
       bpy.ops.pose.select_all(action='SELECT')
       bpy.ops.pose.rotation_mode_set(type='XYZ')
+      bpy.ops.pose.rot_clear()
+      bpy.ops.pose.loc_clear()
+      bpy.ops.pose.scale_clear()
       bpy.ops.pose.select_all(action='DESELECT')      
       directory = self.directory
       for file in self.files:
@@ -177,6 +180,9 @@ class OBJECT_OT_Import(Operator, ImportHelper):
       bpy.ops.object.mode_set(mode='POSE')
       bpy.ops.pose.select_all(action='SELECT')
       bpy.ops.pose.rotation_mode_set(type='XYZ')
+      bpy.ops.pose.rot_clear()
+      bpy.ops.pose.loc_clear()
+      bpy.ops.pose.scale_clear()
       self.report({'INFO'}, f"Selected file: {filepath}")
       return {'FINISHED'}
     
@@ -966,8 +972,7 @@ def unregister():
     del bpy.types.Scene.bones_that_uses_ik
     del bpy.types.Scene.show_warning
     del bpy.types.Scene.output
-    bpy.utils.unregister_class(Types) 
+    bpy.utils.unregister_class(Types)
     del bpy.types.Scene.typeID
 if __name__ == "__main__":
     register()
- 
