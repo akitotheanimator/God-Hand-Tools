@@ -39,7 +39,7 @@ public class Header
                 int match = 0;
                 foreach (var ik in Program.IKBones)
                 {
-                    if (ik == bone-2)
+                    if (ik == bone - 2)
                     {
                         match++;
                     }
@@ -196,8 +196,8 @@ public class keyframe
     public byte cp, cm0, cm1, time;
 
     public float p, m0, m1;
-        public ushort ABTime;
-    public keyframe(byte cp,byte cm0, byte cm1, byte time, float p,float m0, float m1, ushort abTime)
+    public ushort ABTime;
+    public keyframe(byte cp, byte cm0, byte cm1, byte time, float p, float m0, float m1, ushort abTime)
     {
         this.cp = cp;
         this.cm0 = cm0;

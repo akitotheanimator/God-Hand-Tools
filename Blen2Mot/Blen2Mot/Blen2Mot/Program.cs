@@ -148,15 +148,19 @@ public static class Program
                     h.oM0 = km0.ToArray();
                     h.oM1 = km1.ToArray();
                     h.absoluteTime = ktime.ToArray();
-                    if (h.bone == -1 && GlobalTools.returnType(h.type).Contains("rotation"))
+                    if (3 > 4)
                     {
-                        Console.WriteLine("WARNING: Root bone has animated rotation. The program will ignore the root bone rotation curves to avoid the animation to break entirely.\nPress any key to continue.");
-                        Console.ReadLine();
+                        if (h.bone == -1 && GlobalTools.returnType(h.type).Contains("rotation"))
+                        {
+                            Console.WriteLine("WARNING: Root bone has animated rotation. The program will ignore the root bone rotation curves to avoid the animation to break entirely.\nPress any key to continue.");
+                            Console.ReadLine();
+                        }
+                        else
+                        {
+                            data.Add(h);
+                        }
                     }
-                    else
-                    {
-                        data.Add(h);
-                    }
+                    data.Add(h);
                 }
             }
             string message = "";
