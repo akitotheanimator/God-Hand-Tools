@@ -3,7 +3,7 @@ bl_info = {
     "blender": (3, 2, 0),
     "category": "3D View",
     "author": "Akito",
-    "version": (1, 0, 0),
+    "version": (0, 2, 2),
     "description": "Export Animation directly to MOT",
     "warning": "Use only EULER Rotations. QUATERNION rotations will be IGNORED",
     "tracker_url": "https://github.com/akitotheanimator/God-Hand-Tools/tree/main",
@@ -695,12 +695,50 @@ class VIEW3D_PT_MOTPanel(Panel):
         scene = context.scene
         
         
+    
+    
+    
+        
         boxSett = layout.box()
-        boxSett.label(text="Blen2MOT Setup", icon='IMPORT')
+        
+        boxSett.label(text="Blen2MOT Setup Info", icon='IMPORT')
         boxFS = boxSett.box()
-        boxFS.prop(scene, "folder_path", text="Export Folder", icon='EXPORT')
-        boxFS.prop(scene, "exe_path", text="Blen2MOT Exe", icon='FILE_SCRIPT')
-        boxFS.prop(scene, "bone_path", text="Bone File", icon='BONE_DATA')
+        
+        preferences = bpy.context.preferences.addons['Blen2MOT'].preferences
+        if preferences.export_path:
+            boxT1 = boxFS.row()
+            split = boxT1.split(factor=0.23)
+            
+            split.label(text="Blen2MOT Exe: ")
+            VP = split.box()
+            
+            VP.label(text=str(preferences.export_path),icon='FILE_SCRIPT')
+            #boxMS.label(text="MOT Utility", icon='PREVIEW_RANGE');
+        
+        
+        if preferences.folder_path:
+            boxT1 = boxFS.row()
+            split = boxT1.split(factor=0.23)
+            split.label(text="Export Folder: ")
+            
+            VP = split.box()
+            VP.label(text=str(preferences.folder_path),icon='EXPORT')
+            
+        
+        
+            
+        if preferences.bone_path:
+            boxT1 = boxFS.row()
+            split = boxT1.split(factor=0.23)
+            split.label(text="Bone File: ")
+            
+            VP = split.box()
+            VP.label(text=str(preferences.bone_path),icon='BONE_DATA')
+
+        
+        
+        
+        
         boxFS.prop(scene, "output", text="See the program output?", icon='HELP')
         
         
@@ -812,61 +850,47 @@ class VIEW3D_PT_MOTPanel(Panel):
 
 
 
-class Types(bpy.types.PropertyGroup):
-    typeEnum: bpy.props.EnumProperty(
-        name="Event type",
-        description="Select an type",
-        items=[
-            ('OPTION_A', "PLAYSOUND_EVENT", "Plays a sound at a certain frame of the animation."),
-            ('OPTION_B', "Option B", "This is option B"),
-            ('OPTION_C', "Option C", "This is option C"),
-        ],
-        default='OPTION_A',
-    )
 
+class Blen2MOTPreferences(bpy.types.AddonPreferences):
+    bl_idname = __name__
+
+
+    export_path: StringProperty(
+        name="Executable Path",
+        description="Path to the MOTExporter executable",
+        default="C:/Users/",
+        subtype='FILE_PATH',
+    )
+    
+    folder_path: StringProperty(
+        name="Folder Path",
+        description="Path to selected folder",
+        default="C:/Users/",
+        subtype='DIR_PATH'
+    )
+    bone_path: StringProperty(
+        name="Bones Path",
+        description="Path to the model .bones",
+        default="C:/Users/",
+        subtype='FILE_PATH'
+    )
     
     
-class VIEW3D_PT_SEQPanel(Panel):
-    bl_label = "SEQTool"
-    bl_idname = "VIEW3D_PT_STP"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'MOT'
+
     def draw(self, context):
         layout = self.layout
-        scene = context.scene   
-        
-        
-        
-        
-        
-        
-        layout.separator()
-        layout.label(text="Events:")
-        box1 = layout.box()
-        if scene.timeline_markers:
-            for marker in scene.timeline_markers:
-                boxSett = box1.box()
-                boxSett.label(text=f"Event: {marker.name}:     at    Frame: {marker.frame}")
-        else:
-            box1.label(text="No events found.")
-            
-        layout.separator()
-        layout.separator()
-        box1 = layout.box()
-        box1.operator("object.import_action", text="Create Frame Event of type:", icon='PLAY')
-        typeID = scene.typeID
-        box1.prop(typeID, "typeEnum")
-        layout.separator()
-        box1 = layout.box()
-        box1.operator("object.import_action", text=" :", icon='PLAY')
+
+        layout.label(text="Blen2MOT Setup")
+        layout.prop(self, "export_path")
+        layout.prop(self, "folder_path")
+        layout.prop(self, "bone_path")
+    
         
         
 def register():
     bpy.utils.register_class(OBJECT_OT_Import)
     bpy.utils.register_class(OBJECT_OT_Export)
     bpy.utils.register_class(VIEW3D_PT_MOTPanel)
-    bpy.utils.register_class(VIEW3D_PT_SEQPanel)
     bpy.utils.register_class(OBJECT_OT_FeetSetup)
     bpy.utils.register_class(DXOperator)
     bpy.utils.register_class(DYOperator)
@@ -880,28 +904,11 @@ def register():
     bpy.utils.register_class(DAOperator) 
     bpy.utils.register_class(DRAOperator)
     bpy.utils.register_class(DSAOperator) 
-    bpy.types.Scene.exe_path = StringProperty(
-        name="Executable Path",
-        description="Path to the MOTExporter executable",
-        default="C:/Users/",
-        subtype='FILE_PATH'
-    )
+    bpy.utils.register_class(Blen2MOTPreferences)
     bpy.types.Scene.show_warning = StringProperty(
         name="Animation tip:",
         description="The root bone shoud ONLY be used for x and y translations. Meanwhile, bone 0 should only be used for y translations. if you try to apply rotation or position animation that doesn't satisfy any of the bone limitations, the animation may break or not work as expected, however, any other transform animation for any other bone will work fine.",
         default="Hover me!"
-    )
-    bpy.types.Scene.bone_path = StringProperty(
-        name="Bones Path",
-        description="Path to the model .bones",
-        default="C:/Users/",
-        subtype='FILE_PATH'
-    )
-    bpy.types.Scene.folder_path = StringProperty(
-        name="Folder Path",
-        description="Path to selected folder",
-        default="C:/Users/",
-        subtype='DIR_PATH'
     )
     bpy.types.Scene.loop = BoolProperty(
         name="Loops",
@@ -941,14 +948,12 @@ def register():
         default=0.02
     )
     bpy.utils.register_class(CleanupOperator)
-    bpy.utils.register_class(Types)
-    bpy.types.Scene.typeID = bpy.props.PointerProperty(type=Types)
+
 
 def unregister():
     bpy.utils.unregister_class(OBJECT_OT_Export)
     bpy.utils.unregister_class(OBJECT_OT_Import)
     bpy.utils.unregister_class(OBJECT_OT_FeetSetup)
-    bpy.utils.unregister_class(VIEW3D_PT_SEQPanel)
     bpy.utils.unregister_class(VIEW3D_PT_MOTPanel)
     bpy.utils.unregister_class(DAOperator) 
     bpy.utils.unregister_class(DXOperator)
@@ -963,16 +968,12 @@ def unregister():
     bpy.utils.unregister_class(DSZOperator)
     bpy.utils.unregister_class(DSAOperator)
     bpy.utils.unregister_class(CleanupOperator)
+    bpy.utils.unregister_class(Blen2MOTPreferences)
     del bpy.types.Scene.simplify_factor
-    del bpy.types.Scene.folder_path
     del bpy.types.Scene.cutscene
-    del bpy.types.Scene.exe_path
-    del bpy.types.Scene.bone_path
     del bpy.types.Scene.loop
     del bpy.types.Scene.bones_that_uses_ik
     del bpy.types.Scene.show_warning
     del bpy.types.Scene.output
-    bpy.utils.unregister_class(Types)
-    del bpy.types.Scene.typeID
 if __name__ == "__main__":
     register()
