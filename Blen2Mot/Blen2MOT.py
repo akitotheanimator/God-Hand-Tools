@@ -3,7 +3,7 @@ bl_info = {
     "blender": (3, 2, 0),
     "category": "3D View",
     "author": "Akito",
-    "version": (0, 2, 2),
+    "version": (1, 0, 0),
     "description": "Export Animation directly to MOT",
     "warning": "Use only EULER Rotations. QUATERNION rotations will be IGNORED",
     "tracker_url": "https://github.com/akitotheanimator/God-Hand-Tools/tree/main",
@@ -39,6 +39,7 @@ class OBJECT_OT_Import(Operator, ImportHelper):
     )
     
     def execute(self, context):
+      preferences = bpy.context.preferences.addons['Blen2MOT'].preferences
       obj = context.object
       if obj and obj.type != 'ARMATURE':
             self.report({'WARNING'}, "Select a armature!")
@@ -55,7 +56,7 @@ class OBJECT_OT_Import(Operator, ImportHelper):
         filepath = os.path.join(directory, file.name)  
         #os.system('start cmd /k ' + context.scene.exe_path + ' ' + filepath + ' True ' + context.scene.bone_path)
         
-        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + filepath + '\" \"True\" \"' + context.scene.bone_path + "\"")
+        os.system('start /wait \"\"  \"' + preferences.exe_path + '\" \"' + filepath + '\" \"True\" \"' + preferences.bone_path + "\"")
         
         if obj is None:
             print("No active object found.")
@@ -195,8 +196,8 @@ class OBJECT_OT_Export(Operator):
     def execute(self, context):
                     
                     
-                    
-        folder_path = context.scene.folder_path
+        preferences = bpy.context.preferences.addons['Blen2MOT'].preferences
+        folder_path = preferences.folder_path
         if not folder_path:
             self.report({'WARNING'}, "No folder selected.")
             return {'CANCELLED'}
@@ -252,12 +253,12 @@ class OBJECT_OT_Export(Operator):
            
         file_path_args = folder_path + "MOTARGS" + action.name + ".txt"
         with open(file_path_args, 'w') as file:
-           file.write(file_path + '\n' + action.name + '\n' + str(context.scene.loop) + '\n' + str(context.scene.bones_that_uses_ik) + '\n' + str(context.scene.bone_path) + '\n' + str(context.scene.output) + '\n' + str(context.scene.cutscene))
+           file.write(file_path + '\n' + action.name + '\n' + str(context.scene.loop) + '\n' + str(context.scene.bones_that_uses_ik) + '\n' + str(preferences.bone_path) + '\n' + str(context.scene.output) + '\n' + str(context.scene.cutscene))
         
         
-        self.report({'WARNING'}, 'start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
+        self.report({'WARNING'}, 'start /wait \"\"  \"' + preferences.exe_path + '\" \"' + file_path_args + '\"')
         
-        os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\" \"False\"')
+        os.system('start /wait \"\"  \"' + preferences.exe_path + '\" \"' + file_path_args + '\" \"False\"')
         #os.system('start cmd /k ' + context.scene.exe_path + ' ' + file_path_args+ ' ' + str(False ))  
         
         self.report({'INFO'}, "Export complete.")
@@ -705,14 +706,14 @@ class VIEW3D_PT_MOTPanel(Panel):
         boxFS = boxSett.box()
         
         preferences = bpy.context.preferences.addons['Blen2MOT'].preferences
-        if preferences.export_path:
+        if preferences.exe_path:
             boxT1 = boxFS.row()
             split = boxT1.split(factor=0.23)
             
             split.label(text="Blen2MOT Exe: ")
             VP = split.box()
             
-            VP.label(text=str(preferences.export_path),icon='FILE_SCRIPT')
+            VP.label(text=str(preferences.exe_path),icon='FILE_SCRIPT')
             #boxMS.label(text="MOT Utility", icon='PREVIEW_RANGE');
         
         
@@ -855,7 +856,7 @@ class Blen2MOTPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
 
 
-    export_path: StringProperty(
+    exe_path: StringProperty(
         name="Executable Path",
         description="Path to the MOTExporter executable",
         default="C:/Users/",
@@ -881,7 +882,7 @@ class Blen2MOTPreferences(bpy.types.AddonPreferences):
         layout = self.layout
 
         layout.label(text="Blen2MOT Setup")
-        layout.prop(self, "export_path")
+        layout.prop(self, "exe_path")
         layout.prop(self, "folder_path")
         layout.prop(self, "bone_path")
     
