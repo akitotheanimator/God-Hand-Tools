@@ -96,6 +96,7 @@ In this case, bone 28 is where the camera is located, and bone 29 is where the c
 ## This tool wouldn't be possible without the help of *Rin/anasrar* and *JADERLINK!*
 * Rin's github: https://github.com/anasrar/
 * Jader's github: https://github.com/JADERLINK/
+  
 Thank you two!
 
 
