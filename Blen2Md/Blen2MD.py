@@ -671,7 +671,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             
                             
                             #normals.append((0,y,0))
-                            normals.append((x,y,z))
+                            normals.append((x * -1,y * -1,z * -1))
                             
                         uv = []
                         file.seek(uvOffset)
