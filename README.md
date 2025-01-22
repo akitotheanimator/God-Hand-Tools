@@ -93,6 +93,12 @@ In this case, bone 28 is where the camera is located, and bone 29 is where the c
 # Blen2MD 1.0
 *THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
 
+This tool wouldn't be possible without the help of Rin/anasrar and JADERLINK!
+Rin's github: https://github.com/anasrar/
+Jader's github: https://github.com/JADERLINK/
+Thank you two!
+
+
 Export models from Blender to God hand MD Format.
 Import God hand MD to Blender.
 This tool comes with a blender .py addon that needs to be installed.
