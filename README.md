@@ -89,4 +89,18 @@ https://www.youtube.com/watch?v=-plPDKMJBEA
 * (In case you want to animate Gene.)Some animations in God Hand uses Animated Camera. To animate the god hand camera , keep in mind how the camera works. In gene's skeleton, we can see a bone called 28 and 29.
 In this case, bone 28 is where the camera is located, and bone 29 is where the camera will look at. To animate the camera's FOV, animate bone 28 Y Rotation.
 * Make sure to always optimize the animation. Either using F-Curve addon or cleaning up the curves manually. I know it's harder manually but sometimes that's the best option.
+
+# Blen2MD 1.0
+*THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
+
+Export models from Blender to God hand MD Format.
+Import God hand MD to Blender.
+This tool comes with a blender .py addon that needs to be installed.
+
+it is finally possible!
+
+![ezgif-1-b0a17db52e](https://github.com/user-attachments/assets/ad621802-e48d-45f0-a2f4-baec1c40e807)
+
+
+
 # if you need anything contact me in discord srnoobi#3108!
