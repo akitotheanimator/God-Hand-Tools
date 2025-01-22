@@ -116,4 +116,4 @@ https://imagemagick.org/
 if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
 
 
-# if you need anything contact me in discord srnoobi#3108!
+# if you need any help about my tools contact me in discord srnoobi#3108!
