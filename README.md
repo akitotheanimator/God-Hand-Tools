@@ -109,5 +109,11 @@ it is finally possible!
 ![ezgif-1-b0a17db52e](https://github.com/user-attachments/assets/ad621802-e48d-45f0-a2f4-baec1c40e807)
 
 
+The Texture Ytility will require you to download a copy of imagemagick. I have implemented if for being a light source code program, besides it's free.
+
+https://imagemagick.org/
+
+if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
+
 
 # if you need anything contact me in discord srnoobi#3108!
