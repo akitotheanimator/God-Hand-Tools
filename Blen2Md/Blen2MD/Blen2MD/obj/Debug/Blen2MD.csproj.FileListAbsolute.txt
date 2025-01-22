@@ -1,0 +1,10 @@
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\obj\Debug\Blen2MD.csproj.AssemblyReference.cache
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\obj\Debug\Blen2MD.csproj.CoreCompileInputs.cache
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\bin\Debug\Blen2MD.exe.config
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\bin\Debug\Blen2MD.exe
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\bin\Debug\Blen2MD.pdb
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\obj\Debug\Blen2MD.csproj.Up2Date
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\obj\Debug\Blen2MD.exe
+C:\Users\mathe\source\repos\Blen2MD\Blen2MD\obj\Debug\Blen2MD.pdb
