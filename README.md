@@ -94,8 +94,8 @@ In this case, bone 28 is where the camera is located, and bone 29 is where the c
 *THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
 
 This tool wouldn't be possible without the help of Rin/anasrar and JADERLINK!
-Rin's github: https://github.com/anasrar/
-Jader's github: https://github.com/JADERLINK/
+* Rin's github: https://github.com/anasrar/
+* Jader's github: https://github.com/JADERLINK/
 Thank you two!
 
 
