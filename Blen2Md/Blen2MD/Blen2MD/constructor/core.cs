@@ -558,9 +558,9 @@ public static class core
 
 
                                 
-                                float X = normals.vertices[c].normal.X*-1;
-                                float Y = normals.vertices[c].normal.Y*-1;
-                                float Z = normals.vertices[c].normal.Z*-1;
+                                float X = normals.vertices[c].normal.X;
+                                float Y = normals.vertices[c].normal.Y;
+                                float Z = normals.vertices[c].normal.Z;
 
 
 

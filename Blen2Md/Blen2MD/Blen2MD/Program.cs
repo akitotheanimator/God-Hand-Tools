@@ -179,16 +179,17 @@ public static class Program
                             int indice = int.Parse(data01[j + 0]);
 
                             spl1 = data01[j + 1].Split(',');
-                            float p1 = float.Parse(spl1[0]);
-                            float p2 = float.Parse(spl1[1]);
-                            float p3 = float.Parse(spl1[2]);
+                            float p1 = float.Parse(spl1[0], CultureInfo.InvariantCulture);
+                            float p2 = float.Parse(spl1[1], CultureInfo.InvariantCulture);
+                            float p3 = float.Parse(spl1[2], CultureInfo.InvariantCulture);
+                            Console.WriteLine(p1 + "   " + p2 + "   " + p3 + "      " + spl1[0]);
 
                             spl1 = data01[j + 2].Split(',');
 
 
-                            float n1 = float.Parse(spl1[0]);
-                            float n2 = float.Parse(spl1[1]);
-                            float n3 = float.Parse(spl1[2]);
+                            float n1 = float.Parse(spl1[0], CultureInfo.InvariantCulture);
+                            float n2 = float.Parse(spl1[1], CultureInfo.InvariantCulture);
+                            float n3 = float.Parse(spl1[2], CultureInfo.InvariantCulture);
 
 
 
@@ -197,14 +198,14 @@ public static class Program
                                 spl1 = data01[j + 3].Split(',');
 
 
-                                float uv1 = float.Parse(spl1[0]);
-                                float uv2 = float.Parse(spl1[1]);
+                                float uv1 = float.Parse(spl1[0], CultureInfo.InvariantCulture);
+                                float uv2 = float.Parse(spl1[1], CultureInfo.InvariantCulture);
                                 //Console.WriteLine(uv1 +","+ uv2 + "  " + spl1[0]+","+ spl1[1]);
                                 vert.uv = new Vector2(uv1, uv2);
                                 List<Vector2> UVsConnect = new List<Vector2>();
                                 for(int h = 2; h < spl1.Length;h+=2)
                                 {
-                                    UVsConnect.Add(new Vector2(float.Parse(spl1[h + 0]), float.Parse(spl1[h + 1])));
+                                    UVsConnect.Add(new Vector2(float.Parse(spl1[h + 0], CultureInfo.InvariantCulture), float.Parse(spl1[h + 1], CultureInfo.InvariantCulture)));
                                 }
                                 vert.connectedUVs = UVsConnect.ToArray();
                                 //Console.WriteLine(UVsConnect.Count+ "     CONNECTS!!!");
