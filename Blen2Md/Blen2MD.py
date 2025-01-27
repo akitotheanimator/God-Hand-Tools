@@ -415,7 +415,7 @@ class OBJECT_OT_Retrieve(bpy.types.Operator):
                                if image:
                                    if image.filepath not in processed_images:
                                       #self.report({'INFO'}, 'start cmd /k \"\"' + bpy.context.scene.input_IM + '\"\"  \"' + image.filepath + '\ " -resize' + str(scene.collapse.dimensions[0])  + 'x' + str(scene.collapse.dimensions[1]) + ' -colors ' + str(scene.collapse.colors) + ' \"' +  context.scene.input_IM + 'IN.png\"')
-                                      os.system('start /wait \"\"  \"' + preferences.input_IM + '\" \"' + image.filepath + '\" -resize ' + str(scene.collapse.dimensions[0])  + 'x' + str(scene.collapse.dimensions[1]) + ' -colors ' + str(scene.collapse.colors) + ' -alpha off \"' +  image.filepath + 'OUT.png\"')
+                                      os.system('start /wait \"\"  \"' + preferences.input_IM + '\" \"' + image.filepath + '\" -resize ' + str(scene.collapse.dimensions[0])  + 'x' + str(scene.collapse.dimensions[1]) + ' -colors ' + str(scene.collapse.colors) + ' \"' +  image.filepath + 'OUT.png\"')
                                       processed_images.append(image.filepath)
                                    
                                       print(image.filepath)
@@ -671,7 +671,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             
                             
                             #normals.append((0,y,0))
-                            normals.append((x * -1,y * -1,z * -1))
+                            normals.append((x,y,z))
                             
                         uv = []
                         file.seek(uvOffset)
