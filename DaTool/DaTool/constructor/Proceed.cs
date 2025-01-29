@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -306,28 +307,37 @@ public static class Proceed
                         {
                             names.Add(readValue(fs.Position, NumberType.STRING));
                         }
+                        names.Add("lol"); //this too.
+                        List<(uint, string)> liNam = new List<(uint, string)>();
                         #endregion
-
-                        for (int i = 0; i < offsets.Count - 1; i++)
+                        for (int i = 0; i < offsets.Count; i++)
                         {
-                            fs.Position = offsets[i];
-                            uint range = offsets[i + 1];
+                            liNam.Add((offsets[i], names[i]));
+                        }
+                        for (int i = 0; i < liNam.Count - 1; i++)
+                        {
+                            fs.Position = liNam[i].Item1;
+                            uint range = 0;
 
-
-                            if (range == 0)
+                            var tmplst = liNam;
+                            tmplst.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+                            for (int g = 0; g < tmplst.Count; g++)
                             {
-                                for (int f = i + 1; f < offsets.Count; f++)
-                                    if (offsets[f] != 0)
-                                    {
-                                        range = offsets[f];
-                                        break;
-                                    }
-
+                                if (tmplst[g].Item1 == liNam[i].Item1)
+                                {
+                                    range = liNam[i + 1].Item1;
+                                    break;
+                                }
                             }
-                            int bCount = (int)(range - offsets[i]);
+                            
+                            int bCount = (int)(range - fs.Position);
+
+
+
                             if (fs.Position == 0) bCount = 0;
 
-                            data.Add((names[i], br.ReadBytes(bCount)));
+                            //Console.WriteLine(liNam[i] + "    " + bCount);
+                            data.Add((liNam[i].Item2, br.ReadBytes(bCount)));
                         }
 
                     }
