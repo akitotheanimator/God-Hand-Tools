@@ -319,13 +319,20 @@ public static class Proceed
                             fs.Position = liNam[i].Item1;
                             uint range = 0;
 
-                            var tmplst = liNam;
+                            List<(uint, string)> tmplst = new List<(uint, string)>();
+                            foreach(var f in liNam)
+                            {
+                                tmplst.Add(f);
+                            }
+
+
+
                             tmplst.Sort((a, b) => a.Item1.CompareTo(b.Item1));
                             for (int g = 0; g < tmplst.Count; g++)
                             {
                                 if (tmplst[g].Item1 == liNam[i].Item1)
                                 {
-                                    range = liNam[i + 1].Item1;
+                                    range = tmplst[g+1].Item1;
                                     break;
                                 }
                             }
@@ -334,7 +341,7 @@ public static class Proceed
 
 
 
-                            if (fs.Position == 0) bCount = 0;
+                            if (liNam[i].Item1 == 0) bCount = 0;
 
                             //Console.WriteLine(liNam[i] + "    " + bCount);
                             data.Add((liNam[i].Item2, br.ReadBytes(bCount)));
