@@ -67,7 +67,7 @@ https://youtu.be/5khJHuOooMw
 
 
  
-### Blen2MOT 2.0
+# Blen2MOT 2.0
 *THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
 
  
@@ -93,9 +93,9 @@ https://www.youtube.com/watch?v=-plPDKMJBEA
 In this case, bone 28 is where the camera is located, and bone 29 is where the camera will look at. To animate the camera's FOV, animate bone 28 Y Rotation.
 * Make sure to always optimize the animation. Either using F-Curve addon or cleaning up the curves manually. I know it's harder manually but sometimes that's the best option.
 
-### Blen2MD 1.0
-*THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
-
+># Blen2MD 1.0
+>*THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
+>
 ## This tool wouldn't be possible without the help of *Rin/anasrar* and *JADERLINK!*
 * Rin's github: https://github.com/anasrar/
 * Jader's github: https://github.com/JADERLINK/
