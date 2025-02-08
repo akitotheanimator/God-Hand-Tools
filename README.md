@@ -62,10 +62,12 @@ How to use it:
 
 https://youtu.be/5khJHuOooMw
 
+ ![2 Sem Título_20241109160626](https://github.com/user-attachments/assets/df00439e-6725-4db2-9497-db5a61a2a9d1)
+
+
+ 
 # Blen2MOT 2.0
 *THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
-
- ![2 Sem Título_20241109160626](https://github.com/user-attachments/assets/df00439e-6725-4db2-9497-db5a61a2a9d1)
 
  
 Export animations from Blender to God hand MOT Format.
