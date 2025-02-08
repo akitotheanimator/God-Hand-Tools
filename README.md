@@ -96,27 +96,25 @@ In this case, bone 28 is where the camera is located, and bone 29 is where the c
 ># Blen2MD 1.0
 >*THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
 >
-## This tool wouldn't be possible without the help of *Rin/anasrar* and *JADERLINK!*
-* Rin's github: https://github.com/anasrar/
-* Jader's github: https://github.com/JADERLINK/
-  
-Thank you two!
-
-
-Export models from Blender to God hand MD Format.
-Import God hand MD to Blender.
-This tool comes with a blender .py addon that needs to be installed.
-
-it is finally possible!
-
-![ezgif-1-b0a17db52e](https://github.com/user-attachments/assets/ad621802-e48d-45f0-a2f4-baec1c40e807)
-
-
-The Texture Utility will require you to download a copy of imagemagick. I have implemented if for being a light source code program, besides it's free.
-
-https://imagemagick.org/
-
-if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
+>## This tool wouldn't be possible without the help of *Rin/anasrar* and *JADERLINK!*
+>* Rin's github: https://github.com/anasrar/
+>* Jader's github: https://github.com/JADERLINK/
+>  
+>Thank you two!
+>
+>Export models from Blender to God hand MD Format.
+>Import God hand MD to Blender.
+>This tool comes with a blender .py addon that needs to be installed.
+>
+>it is finally possible!
+>
+>![ezgif-1-b0a17db52e](https://github.com/user-attachments/assets/ad621802-e48d-45f0-a2f4-baec1c40e807)
+>
+>The Texture Utility will require you to download a copy of imagemagick. I have implemented if for being a light source code program, besides it's free.
+>
+>https://imagemagick.org/
+>
+>if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
 
 
 # if you need any help about my tools contact me in discord srnoobi#3108!
