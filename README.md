@@ -18,7 +18,7 @@ And huge thanks to Kerilk, Shotouts to this mad lad who documented the whole MOT
 
 **in case you're wondering, here's the MOT documentation: https://github.com/Kerilk/bayonetta_tools/wiki/Motion-Formats-%28mot-files%29**
 
-# DAT Extractor
+# DAT Extractor [obsolete]
 
 Works like the classic one, but BETTER, it reads all the contents of the god hand packed data (.dat) and extract all of the contents in there. This one has a more robust code and supports:
 * GPFs(Generic package files, includes pl or em dats...)
