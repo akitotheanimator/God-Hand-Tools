@@ -28,7 +28,7 @@ public static class Proceed
             {
                 for(int f = 0; f < allFiles.Count;f++)
                 {
-                    if(h == allFiles[f])
+                    if(h == allFiles[f] || allFiles[f].Contains("#IGNORE"))
                     {
                         allFiles.RemoveAt(f);
                         f -= 1;
@@ -62,7 +62,7 @@ public static class Proceed
             using (FileStream fs = new FileStream(Path.GetDirectoryName(file) + "/" + spli[spli.Length-1].Replace("_extracted","") + fType, FileMode.Create))
             using (BinaryWriter br = new BinaryWriter(fs))
             {
-                if (tp != 2)
+                if (tp == 0 || tp == 1)
                 {
                     br.Write(allFiles.Count);
                     List<uint> offsets = new List<uint>();
@@ -97,7 +97,8 @@ public static class Proceed
                         Console.WriteLine("Processing file " + Path.GetFileName(allFiles[a]) + ". " + (allFiles.Count - a - 1) + " Files remaining.");
                         br.Write(File.ReadAllBytes(allFiles[a]));
                     }
-                } else
+                }
+                if (tp == 2)
                 {
                     ushort mC = 0;
                     foreach (var a in allFiles)
@@ -241,6 +242,37 @@ public static class Proceed
                     }
                     #endregion
                 }
+                if (tp == 3)
+                {
+                    br.Write(4476229);
+                    br.Write(allFiles.Count);
+                    List<long> writeOnLAter = new List<long>();
+                    List<long> offsets = new List<long>();
+                    while (fs.Position % 16 != 0) br.Write((byte)0);
+                    foreach (var a in allFiles)
+                    {
+                        writeOnLAter.Add(fs.Position);
+                        br.Write(0);
+                    }
+                    while (fs.Position % 16 != 0) br.Write((byte)0);
+                    foreach(var a in allFiles)
+                    {
+                        offsets.Add(fs.Position);
+                        br.Write(File.ReadAllBytes(a));
+                    }
+                    for(int i = 0; i < writeOnLAter.Count;i++)
+                    {
+                        if (Path.GetExtension(allFiles[i]) != ".dmy")
+                        {
+                            fs.Position = writeOnLAter[i];
+                            br.Write((uint)offsets[i]);
+                        } else
+                        {
+                            br.Write(0);
+                        }
+                    }
+
+                }
             }
         }
         else
@@ -252,7 +284,6 @@ public static class Proceed
             {
                 GlobalTools.fs = fs;
                 GlobalTools.br = br;
-
                 #region type
                 Console.Write("Dat type is...");
                 int type = 0;
@@ -260,7 +291,7 @@ public static class Proceed
                     readValue(readValue(8, NumberType.UINT), NumberType.UINT) == 0 &&
                     readValue(readValue(12, NumberType.UINT), NumberType.UINT) == 0)
                     type = 1;
-
+                if (readValue(0, NumberType.UINT) == 4476229) type = 3;
                 if (readValue(0, NumberType.BYTE) == 1 && readValue(4, NumberType.BYTE) == 96)
                     type = 2;
 
@@ -314,20 +345,18 @@ public static class Proceed
                         {
                             liNam.Add((offsets[i], names[i]));
                         }
+                        #region sorter
+                        List<(uint, string)> tmplst = new List<(uint, string)>();
+                        foreach (var f in liNam)
+                        {
+                            tmplst.Add(f);
+                        }
+                        tmplst.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+                        #endregion
                         for (int i = 0; i < liNam.Count - 1; i++)
                         {
                             fs.Position = liNam[i].Item1;
                             uint range = 0;
-
-                            List<(uint, string)> tmplst = new List<(uint, string)>();
-                            foreach(var f in liNam)
-                            {
-                                tmplst.Add(f);
-                            }
-
-
-
-                            tmplst.Sort((a, b) => a.Item1.CompareTo(b.Item1));
                             for (int g = 0; g < tmplst.Count; g++)
                             {
                                 if (tmplst[g].Item1 == liNam[i].Item1)
@@ -551,14 +580,49 @@ public static class Proceed
                     }
 
                 }
+
+               
+                if(type == 3)
+                {
+
+                    string none = "DMY";
+
+
+                    fs.Position = 4;
+                    uint fcount = br.ReadUInt32();
+                    while(fs.Position % 16 != 0) fs.Position += 1;
+                    List<uint> offsets = new List<uint>();
+                    while(offsets.Count < fcount)
+                    {
+                        offsets.Add(br.ReadUInt32());
+                    }
+                    List<uint> sort = new List<uint>();
+                    foreach(var a in offsets)
+                    {
+                        sort.Add(a);
+                    }
+                    sort.Add((uint)fs.Length);
+                    sort.Sort((a,b) => a.CompareTo(b));
+                    foreach (var a in offsets)
+                    {
+                        if (a == 0) data.Add((none,new byte[0]));
+                        else
+                        {
+                            fs.Position = a;
+                            byte[] ret = new byte[0];
+                            for(int i = 0; i < sort.Count-1;i++)
+                            {
+                                if (sort[i] == a) { ret = br.ReadBytes((int)(sort[i+1] - a)); break; }
+                            }
+
+                            data.Add(("SECTION", ret));
+                        }
+                    }
+                }
                 createFile(file, data.ToArray(), (byte)type);
             }
 
         }
-
-
-
-
         //Console.ReadLine();
     }
     public static void createFile(string filePath, (string, byte[])[] data,byte type)

@@ -23,7 +23,7 @@ public static class Program
         if (args.Length == 0)
         {
             //if no files were dragged to the application
-            Console.WriteLine("Drag and drop a DAT/SCP/CMP/EFF/I/ID/DA/IDD file (or folder containing these files) inside this console.");
+            Console.WriteLine("Drag and drop a DAT/SCP/CMP/EFF/I/ID/DA/IDD/EMD file (or folder containing these files) inside this console.");
 
             Console.WriteLine("The program will scan ALL the directories in a folder recursively.");
             Console.WriteLine("To repack, simply drag the generated dbp file on this console.");
