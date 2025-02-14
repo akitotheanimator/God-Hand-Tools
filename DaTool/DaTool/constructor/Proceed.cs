@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -273,6 +274,24 @@ public static class Proceed
                     }
 
                 }
+                if (tp == 4)
+                {
+                    br.Write(5064261);
+                    br.Write(0); br.Write(0); br.Write(0);
+                    uint p1 = (uint)fs.Position;
+                    br.Write(File.ReadAllBytes(allFiles[0]));
+                    uint p2 = (uint)fs.Position;
+                    br.Write(File.ReadAllBytes(allFiles[1]));
+                    uint p3 = (uint)fs.Position;
+                    br.Write(File.ReadAllBytes(allFiles[2]));
+
+                    fs.Position = 4;
+                    br.Write(p1);
+                    fs.Position = 8;
+                    br.Write(p2);
+                    fs.Position = 12;
+                    br.Write(p3);
+                }
             }
         }
         else
@@ -291,10 +310,10 @@ public static class Proceed
                     readValue(readValue(8, NumberType.UINT), NumberType.UINT) == 0 &&
                     readValue(readValue(12, NumberType.UINT), NumberType.UINT) == 0)
                     type = 1;
-                if (readValue(0, NumberType.UINT) == 4476229) type = 3;
                 if (readValue(0, NumberType.BYTE) == 1 && readValue(4, NumberType.BYTE) == 96)
                     type = 2;
-
+                if (readValue(0, NumberType.UINT) == 4476229) type = 3;
+                if (readValue(0, NumberType.UINT) == 5064261) type = 4;
                 Console.Write(type + ".");
                 Console.WriteLine();
                 Console.WriteLine("Gathering files...");
@@ -614,10 +633,26 @@ public static class Proceed
                             {
                                 if (sort[i] == a) { ret = br.ReadBytes((int)(sort[i+1] - a)); break; }
                             }
-
-                            data.Add(("SECTION", ret));
+                            data.Add(("EFM", ret));
                         }
                     }
+                }
+                if (type == 4)
+                {
+                    fs.Position = 4;
+                    uint scr = br.ReadUInt32();
+                    uint tm3 = br.ReadUInt32();
+                    uint emm = br.ReadUInt32();
+                    uint fin = (uint)fs.Length;
+
+                    fs.Position = scr;
+                    data.Add(("MD",br.ReadBytes((int)(tm3 - scr))));
+
+                    fs.Position = scr;
+                    data.Add(("TM3", br.ReadBytes((int)(emm - tm3))));
+
+                    fs.Position = scr;
+                    data.Add(("EMM", br.ReadBytes((int)(fin - emm))));
                 }
                 createFile(file, data.ToArray(), (byte)type);
             }
