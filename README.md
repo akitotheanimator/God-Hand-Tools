@@ -116,4 +116,21 @@ https://imagemagick.org/
 >if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
 
 
+# DaTool
+
+The best dat tool from this pack. Different from DAT Extractor, this one has the ability to Repack too! And supports a large variety of file types such as:
+* DAT
+* SCP
+* CMP
+* EFF
+* I
+* ID
+* DA
+* IDD
+* EMD
+* EFM
+
+
+  
+
 # if you need any help about my tools contact me in discord srnoobi#3108!
