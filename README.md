@@ -28,7 +28,7 @@ Works like the classic one, but BETTER, it reads all the contents of the god han
 Now you can just drag the folders that you want to be readen on and the program will automatically look through all the subdirectories of it and read each dat that contains in there.
 Or, you can simply drag and drog all the dat files on the .exe and it will be processed automatically.
 
-# MdtoSmd2.0
+# MdtoSmd2.0 [obsolete]
 
 Like the old one, it converts god hand .md models to valve smd. It has new features, like saving the bones as a *.bones* file. 
 **you will need this tool in order to use MOTool.**
