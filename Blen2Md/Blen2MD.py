@@ -55,7 +55,6 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
         for bone in selected_obj.pose.bones:
                         bone_name = bone.name
                         bone_position = bone.head
-                        #bone_position_parent = bone.head
                         v1C = bone.head.x
                         v2C = bone.head.y
                         v3C = bone.head.z
@@ -73,9 +72,6 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                             v1C *= -1;
                             v2C *= -1;
                             v3C *= -1;
-                            #bone_position_parent = bone.head - bone.parent.head
-                            
-                        #bone_position_parent = selected_obj.matrix_world @ bone.parent.head
                         current_depth = get_bone_hierarchy_depth(bone)
                         if bone.parent:
                            parent_bone_name = bone.parent.name
@@ -84,57 +80,41 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                            parent_bone_name = '0'
                            parent_depth = -1
             
-            
-            
-            
-                        #print(f"Bone: {bone_name}, Position: {bone.head,bone.parent.head}, Parent: {parent_bone_name}, Depth: {current_depth}, Parent Depth: {parent_depth}")
                         if bone.parent != None:
                            print(f"Bone: {bone_name}, Position: {v1C,v2C,v3C}")
-                        modelRet += ':' + bone_name.replace(":","$").replace(",",".") + ':' + str(current_depth) + ':' + str(parent_bone_name) + ':' + str(v1C) + ':' + str(v2C) + ':' + str(v3C)
+                        modelRet += ':' + bone_name.replace(":","$").replace(",",".") + ':' + str(current_depth) + ':' + str(parent_bone_name) + ':' + str(v1C).replace(',','.') + ':' + str(v2C).replace(',','.') + ':' + str(v3C).replace(',','.')
                        
         for obj in child_meshes:
          materials = obj.data.materials
          if materials:
           print(f"Materials assigned to {obj.name}:")
-          modelRet += "\nmcs:" + obj.name #material code sequence
-          
+          modelRet += "\nmcs:" + obj.name + ":" + str(selected_obj.location).replace(" ","").replace("<Vector(","").replace(", ",",").replace(")>",":") + str(selected_obj.rotation_euler).replace("<Euler (x=","").replace(", y=",",").replace(", z=",",").split(", order=")[0].replace(")","") + ":" + str(selected_obj.scale).replace(" ","").replace("<Vector(","").replace(", ",",").replace(")>",":")  #material code sequence
           
           for i, material in enumerate(materials):
-            
             try:
                print(str(material.name) + "    " + obj.name)
             except Exception as e:
                self.report({'ERROR'}, "The mesh \"" + obj.name + "\" contains a invalid material.")
                return {'CANCELLED'}
             modelRet += "\n" +material.name + "|"
-            
-            
-            
-            #print(f"{i + 1}: {material.name}")
             faces_with_material = []
             for face in obj.data.polygons:
                 if face.material_index == i:
                     faces_with_material.append(face.index)
                     
             if len(faces_with_material) == 0:
-                self.report({'ERROR'}, "The material \"" + material.name + "\" is assigned in mesh \"" + obj.name+"\", but does not contain any triangle assigned.\n Consider removing the material from the mesh, or assigning a triangle on it.")
+                self.report({'ERROR'},  "The material \"" + material.name + "\" is assigned in mesh \"" + obj.name+"\", but does not contain any triangle assigned.\n Consider removing the material from the mesh, or assigning a triangle on it.")
                 return {'CANCELLED'}
-                
             if faces_with_material:
-                #print(f"  Faces with {material.name}: {faces_with_material}")
-                
-                
-                
                 for face_index in faces_with_material:
                     modelRet += str(face_index) + ":"
-                modelRet = modelRet[:-1]  # Remove the last character
+                modelRet = modelRet[:-1]
                 
                 
                 
                 for face_index in faces_with_material:
                     face = obj.data.polygons[face_index]
                     
-                    #print(f"    Face {face_index}:")
                     modelRet += "\n" + str(face_index) + "+"
                     
                     
@@ -143,7 +123,6 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                         vertex_index = loop.vertex_index
                         vertex = obj.data.vertices[vertex_index]
                         position = vertex.co
-                        #normal = face.normal
                         
                         normal = obj.data.vertices[vertex_index].normal
                         
@@ -177,9 +156,23 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                         #print(f"      Vertex {vertex_index}:")
                         modelRet += str(vertex_index) + ":"
                         #print(f"        Position: {position}")
+                        
+                        
+                        if context.scene.map == True:
+                           if position.x > 327.68 or position.x < -327.68:
+                            self.report({'ERROR'}, "A Vertice has position x " + str(position) + " which exceeds the cordinate limit (327.68 or -327.68).")
+                            return {'CANCELLED'}
+                           if position.y > 327.68 or position.y < -327.68:
+                            self.report({'ERROR'}, "A Vertice has position y " + str(position) + " which exceeds the cordinate limit (327.68 or -327.68).")
+                            return {'CANCELLED'}
+                           if position.z > 327.68 or position.z < -327.68:
+                            self.report({'ERROR'},  "A Vertice has position z " + str(position) + " which exceeds the cordinate limit (327.68 or -327.68).")
+                            return {'CANCELLED'}
+                        
                         modelRet += str(position).replace("<Vector (","").replace(", ",",").replace(")>",":");
                         #print(f"        Normal: {normal}")
-                        modelRet += str(normal).replace("<Vector (","").replace(", ",",").replace(")>",":");
+                        if context.scene.map == False:
+                          modelRet += str(normal).replace("<Vector (","").replace(", ",",").replace(")>",":");
                         if uv:
                             #print(f"        UV: {uv}")
                             modelRet += str(uv).replace("<Vector (","").replace(", ",",").replace(")>",",");
@@ -196,7 +189,8 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                             modelRet += "FFFFFF:"
                             
                             
-                        if bone_weights:
+                        if context.scene.map == False:
+                          if bone_weights:
                             #print("WIGHTS?????")
                             retList = ""
                             #print("        Weights:", end=" ")
@@ -239,15 +233,16 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
                             
                             modelRet += str(average_weight) + "," + retList + ":"
                             #print(f", Average weight: {average_weight:.4f}")
-                        else:
-                            modelRet += "FFFFFF:"
+                          else:
+                            modelRet += "root,root,root,FFFFF0:0.0,0.0,0.0,0.0:"
                             #print("        No bone weights")
                     modelRet = modelRet[:-1]  # Remove the last character         
             else:
-                print(f"  No faces with {material.name}")
+                self.report({'ERROR'}, f"  No faces with {material.name}")
+                return {'CANCELLED'}
          else:
-          print(f"No materials assigned to {obj.name}")
-    
+          self.report({'ERROR'}, f"No materials assigned to {obj.name}")
+          return {'CANCELLED'}
     
                 
                 
@@ -265,7 +260,7 @@ class OBJECT_OT_ExportMD(bpy.types.Operator):
            
         #os.system('start /wait \"\"  \"' + context.scene.exe_path + '\" \"' + file_path_args + '\"')
         #print('start cmd /k \"\"' + context.scene.exe_path + '\" \"' + file_path + '\"\" ' + str(context.scene.output) +' \"' + context.scene.input + '\"')
-        os.system('start cmd /k \"\"' + preferences.exe_path + '\" \"' + file_path + '\" ' + str(context.scene.output) +' \"' + context.scene.input + '\" + " False"')
+        os.system('start cmd /k \"\"' + preferences.exe_path + '\" \"' + file_path + '\" ' + str(context.scene.output) +' \"' + context.scene.input + '\" + " \""' + str(context.scene.output) + "\" \"" + str(context.scene.map) + "\"")
         
         self.report({'INFO'}, "Finished!")
         return {'FINISHED'}
@@ -597,8 +592,15 @@ class OBJECT_OT_Import(bpy.types.Operator):
                     file.seek(offsetl + 8)
                     meshName = file.read(8)
                     decodedMesh = meshName.decode("utf-8").strip("\x00")
-
-                    
+                    PoseScaX = struct.unpack("<f", file.read(4))[0]
+                    PoseScaY = struct.unpack("<f", file.read(4))[0]
+                    PoseScaZ = struct.unpack("<f", file.read(4))[0]
+                    PoseRotX = struct.unpack("<f", file.read(4))[0]
+                    PoseRotY = struct.unpack("<f", file.read(4))[0]
+                    PoseRotZ = struct.unpack("<f", file.read(4))[0]
+                    PoseLocX = struct.unpack("<f", file.read(4))[0]
+                    PoseLocY = struct.unpack("<f", file.read(4))[0]
+                    PoseLocZ = struct.unpack("<f", file.read(4))[0]
                     file.seek(offsetl)
                     
                     
@@ -608,8 +610,18 @@ class OBJECT_OT_Import(bpy.types.Operator):
                     
                     file.seek(v1+10)
                     subMeshCount = struct.unpack("<H", file.read(2))[0]
-                    file.seek(v1 + 32)
                     
+                    
+                    
+                    
+                    file.seek(v1 + 28)
+                    MeshType = struct.unpack("<f", file.read(4))[0]
+                    
+                    
+                    
+                    
+                    
+                    file.seek(v1 + 32)
                     checkPoint = file.tell();
                     
                     MeshData = []
@@ -632,18 +644,39 @@ class OBJECT_OT_Import(bpy.types.Operator):
                         
                         
                         
-                        
+                        vA1 = 0
+                        vA2 = 0
+                        vA3 = 0
                         verts = []
                         indices = []
                         file.seek(vertsOffset)
                         for i in range(0, VCount):
-                            x = struct.unpack("<f", file.read(4))[0]
-                            y = struct.unpack("<f", file.read(4))[0]
-                            z = struct.unpack("<f", file.read(4))[0]
-                            code = struct.unpack("<I", file.read(4))[0]
-                            
+                            if MeshType == 1:
+                               x = struct.unpack("<f", file.read(4))[0]
+                               y = struct.unpack("<f", file.read(4))[0]
+                               z = struct.unpack("<f", file.read(4))[0]
+                               code = struct.unpack("<I", file.read(4))[0]
+                            else:
+                                
+                                
+                                    
+                                    
+                                
+                                x = (struct.unpack("<h", file.read(2))[0])
+                                y = (struct.unpack("<h", file.read(2))[0])
+                                z = (struct.unpack("<h", file.read(2))[0])
+                                
+                                code = struct.unpack("<H", file.read(2))[0]
+                                vA1 = x* 0.01
+                                vA2 = y* 0.01
+                                vA3 = z* 0.01
+                                
+                                x = x * 0.01
+                                y = y * 0.01
+                                z = z * 0.01
+                                
+                                #print(str(x) + "    " + str(y) + "      OHYEAH")
                             verts.append((x,y,z));
-                            
                             indices.append(code);
 
 
@@ -658,20 +691,24 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             return map_value(value, -128, 127, -1, 1)
 
                         for i in range(0, VCount):
-                            x = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
-                            y = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
-                            z = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
-                            w = (struct.unpack("<b", file.read(1))[0])
+                            if MeshType == 1:
+                               x = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
+                               y = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
+                               z = (map_signed_byte(struct.unpack("<b", file.read(1))[0]) * -1)
+                               w = (struct.unpack("<b", file.read(1))[0])
                             
-                            le = math.sqrt(x*x + y*y + z*z)
+                               le = math.sqrt(x*x + y*y + z*z)
 
-                            x = x / le
-                            y = y / le
-                            z = z / le
-                            
-                            
-                            #normals.append((0,y,0))
-                            normals.append((x,y,z))
+                               x = x / le
+                               y = y / le
+                               z = z / le
+                            else:
+                                 x = 0
+                                 y = 0
+                                 z = 0
+                                 w = 0
+
+                            normals.append((x* -1,y* -1,z* -1))
                             
                         uv = []
                         file.seek(uvOffset)
@@ -716,21 +753,30 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             
                             map.append((B1,B2,B3,W1,W2,W3))
                             
-
-                        #print(str(len(verts)) + "      " + str(len(indices))+ "      " +str(len(normals))+ "      " +str(len(uv))+ "      " +str(len(color))+ "      " +str(len(map)))
                         MeshData.append((verts,indices,normals,uv,color,map,materialIndex));
-                        
-                        
-                    #print(len(MeshData))
-                    
                     
                     mesh = bpy.data.meshes.new(decodedMesh)
                     mesh_object = bpy.data.objects.new(decodedMesh, mesh)
+                    
+                    
+                    
+                        
+                    armature.rotation_euler[0] = PoseRotX
+                    armature.rotation_euler[1] = PoseRotY
+                    armature.rotation_euler[2] = PoseRotZ
+                    armature.location.x = PoseLocX
+                    armature.location.y = PoseLocY
+                    armature.location.z = PoseLocZ
+                    
+                        
+                    armature.scale.x = PoseScaX
+                    armature.scale.y = PoseScaY
+                    armature.scale.z = PoseScaZ
+                    
                     bpy.context.collection.objects.link(mesh_object)
                     mesh_object.parent = armature
                     armature_modifier = mesh_object.modifiers.new(name="Armature", type='ARMATURE')
                     armature_modifier.object = armature
-                    
                     
                     bm = bmesh.new()
                     normalAbs = []
@@ -739,14 +785,21 @@ class OBJECT_OT_Import(bpy.types.Operator):
                     weightsAbs = []
                     for e in range(0, len(MeshData)):
                         
-                        mat = bpy.data.materials.new(name=str(MeshData[e][6]))
+
+                        matName = str(MeshData[e][6]).split(".")[0]
+                        print(matName)
+                        mat = bpy.data.materials.get(matName)
+                        
+                        if not mat:
+                             mat = bpy.data.materials.new(name=matName)
                         mesh_object.data.materials.append(mat)
+                          
                         
                         material_index = mesh_object.data.materials.find(mat.name)
 
-
                         for o in range(0, len(MeshData[e][0])):
                             bm.verts.new(MeshData[e][0][o])
+                            
                             bm.verts.ensure_lookup_table()
                             
                             if MeshData[e][1][o] == 0:
@@ -755,6 +808,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                                 bm.verts[len(bm.verts)-2],
                                 bm.verts[len(bm.verts)-1]
                                 ])
+                                
                                 f.material_index = material_index
                                 
                             if MeshData[e][1][o] == 1:
@@ -763,6 +817,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                                 bm.verts[len(bm.verts)-3],
                                 bm.verts[len(bm.verts)-1]
                                 ])
+                                
                                 f.material_index = material_index
                         
                         
@@ -779,13 +834,6 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             
                             
                         for o in range(0, len(MeshData[e][5])):
-                            #colorAbs.append(MeshData[e][5][o])
-                            
-                            #MeshData[e][5][o][1]
-                            #MeshData[e][5][o][2]
-                              
-                              
-                              #MeshData[e][5][o][0] != "root"
                             if MeshData[e][5][o][0] not in mesh_object.vertex_groups and MeshData[e][5][o][0] != "root":
                                 mesh_object.vertex_groups.new(name=MeshData[e][5][o][0])
                             
@@ -797,35 +845,29 @@ class OBJECT_OT_Import(bpy.types.Operator):
                                 mesh_object.vertex_groups.new(name=MeshData[e][5][o][2])
                                 
                             weightsAbs.append(MeshData[e][5][o])
-                            
-                        #print("NORM: " + str(len(MeshData[e][2])))
-                        
-                        
-                        #bm.normal_update()
-                        #mesh.normals_split_custom_set_from_vertices(MeshData[e][2])
-                    
                     bm.to_mesh(mesh)
                     
                     
                     bm.free()
                     mesh.update()
                     mesh.use_auto_smooth = True
-                    #print("VLENGTH: " + str(len(normalAbs)))
-                    #print("VERT: " + str(len(mesh.vertices)))
-        
+                    
                     mesh.normals_split_custom_set_from_vertices(normalAbs)
                     uv_layer = mesh.uv_layers.new(name="UVMap")
                     
-                    #vcol_layer = mesh.vertex_colors.new(name="Colors")
                     
                     
+                    color_layer = mesh.color_attributes.new(name="COLOR", type="FLOAT_COLOR", domain="POINT")
                     
-                    
+                    iC = 0
+                    for c in colorAbs:
+                          color_layer.data[iC].color = (c[0], c[1], c[2], c[3])
+                          iC = iC + 1
+
+                        
+                        
 
                     for o in range(0, len(weightsAbs)):
-
-
-                            
                             if weightsAbs[o][0] != "root":
                                vertex_group =  mesh_object.vertex_groups[weightsAbs[o][0]]
                                vertex_group.add([o], weightsAbs[o][3], 'ADD')
@@ -841,8 +883,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                                vertex_group =  mesh_object.vertex_groups[weightsAbs[o][2]]
                                vertex_group.add([o], weightsAbs[o][5], 'ADD')
                                
-                               
-                        
+
                     mesh.update()
                     for face in mesh.polygons:
                         for loop_idx, loop in enumerate(face.loop_indices):
@@ -850,46 +891,19 @@ class OBJECT_OT_Import(bpy.types.Operator):
                             
                             vertex_idx = mesh.loops[loop].vertex_index
                             vertex_coord = mesh.vertices[vertex_idx].co
-                            #vcol_layer.data[vertex_idx].color = colorAbs[vertex_idx]
                             uv[:] = uvAbs[vertex_idx][0]
-                            
-                            #vertex_groups[0].add([0], 1.0, 'REPLACE')
-                            
-                            
-                            
-                            
-                            #print(str(len(mesh.vertices)) + "  " + str(len(uvAbs)) + "     " + str(vertex_idx))
-                            
-                            #for o in range(0, len(uvAbs)):
-                                #print(str(uvAbs[o][1]) + "      " + str(vertex_coord))
-                                #if uvAbs[o][1][0] == vertex_coord.x or uvAbs[o][1][1] == vertex_coord.y or uvAbs[o][1][2] == vertex_coord.z:
-                                    #uv[:] = uvAbs[o][0]
-                                    #break
-                                
-                            #if loop_idx == 0:
-                                #uv[:] = (134.0, 0.0)
-
-                    
-
-                    
-                    
                 file.seek(16)
                 v1 = struct.unpack("<I", file.read(4))[0]
                 file.seek(v1)
                 v2 = struct.unpack("<i", file.read(4))[0]
                 file.seek(v1 + v2 + 8)
-                
-                #print(file.tell())
                 skeletonCount = struct.unpack("<H", file.read(2))[0]
-                
+                file.seek(v1 + v2 + 4)
+                skeletonOffset = struct.unpack("<I", file.read(4))[0]
                 
                 
                 
                 bpy.context.view_layer.objects.active = armature
-                armature.rotation_euler[0] = 1.5708
-
-
-
 
                 bpy.ops.object.mode_set(mode='EDIT')
                 armature_data = armature.data
@@ -905,7 +919,7 @@ class OBJECT_OT_Import(bpy.types.Operator):
                 edit_bones[0].roll = 0;
                     
                 
-                file.seek(v1 + v2 + 48)
+                file.seek(v1 + v2 + skeletonOffset)
                 for i in range(0, skeletonCount):
                     p1 = struct.unpack("<f", file.read(4))[0];
                     p2 = struct.unpack("<f", file.read(4))[0];
@@ -918,35 +932,43 @@ class OBJECT_OT_Import(bpy.types.Operator):
                     new_bone.tail = Vector((p1, p2 + 0.005297, p3))
                     new_bone.head_radius = 0.1;
                     new_bone.tail_radius = 0.05;
-                    new_bone.roll = 0;
                     new_bone.use_connect = False
+                    
                     new_bone.parent = edit_bones[parent]
                     new_bone.head += edit_bones[parent].head
-                    new_bone.tail += edit_bones[parent].head
-                        
-                        
-                    #if new_bone.length != 0.005297:
-                       #edit_bones[parent].tail = new_bone.head
-                    #edit_bones[parent].use_connect = False
-                    #edit_bones[parent].tail = Vector((new_bone.head.x - 0.00001, new_bone.head.y - 0.00001, new_bone.head.z - 0.00001))
-                       
-                        
-                    #child_count = sum(1 for bone in edit_bones if bone.parent == parent)
-                    #if child_count > 1:
-                       #print("ohmygah");
-                            
-                    
-                    
-                
-            else:
-                self.report({'ERROR'}, f"The reference MD is not a MD file.")
-                return {'CANCELLED'}
+                    if new_bone.name != "root" and edit_bones[parent].name != "root":
+                       new_bone.tail += edit_bones[parent].head
+                    new_bone.roll = 0;      
 
-    
-        bpy.ops.object.mode_set(mode='OBJECT')
+                              
+                edit_bones = armature_data.edit_bones  
+               
+                for i in edit_bones:    
+                    child_heads = [edit_bones[child.name].head for child in i.children]
+                    if len(child_heads) == 0:
+                       if i.parent != None:
+                        t1 = i.parent.head
+                        t2 = i.parent.tail
+                        t2 = t2 - t1
+                        t1 = t1 - t1
+                              
+                        i.tail = i.tail + t2
+                        i.head = i.head + t1
+
+                        
+                        i.head = i.head
+                        i.tail = i.tail
+                
+                        
+            else:
+                self.report({'ERROR'}, f"The MD is not a MD file.")
+                return {'CANCELLED'}
+            
+
+
         bpy.context.object.show_in_front = True
         bpy.context.object.data.display_type = 'STICK'
-
+        bpy.ops.object.mode_set(mode='OBJECT')
         return {'FINISHED'}
     
     
@@ -1013,8 +1035,10 @@ class VIEW3D_PT_MDPanel(Panel):
         boxFS = boxFTS.box()
         boxFS.label(text="Blen2MD Project Preferences:");
         boxFS.separator()
+        boxFS.prop(scene, "output", text="See program's console?", icon='HIDE_OFF');
+        boxFS.prop(scene, "map", text="Map Model", icon='PACKAGE');
         boxFS.prop(scene, "input", text="Reference MD", icon='VIEWZOOM')
-        
+
         #if preferences:
            #if preferences.exe_path:
               #boxFTS.prop(scene, "output", text="See the program output?", icon='HELP')
@@ -1043,10 +1067,10 @@ class VIEW3D_PT_MDPanel(Panel):
               
               
         boxIF.separator()  
+        boxIF2 = boxIF.box()
+        bo = boxIF2.box()
         
-        bo = boxIF.box()
-        
-        
+        bo.label(text="Match Position Operation");
         bo.operator("object.sarm", text="Match Armature poses", icon='MOD_ARMATURE')
         if context.scene.SK == "":
            bo.label(text="No Armature to match.");
@@ -1057,8 +1081,9 @@ class VIEW3D_PT_MDPanel(Panel):
         bo.operator("object.sarmc", text="Clear match operation", icon='MOD_ARMATURE')
         
         
-        boxIF.separator() 
-        bo = boxIF.box()
+        boxIF2.label(text="");
+        bo = boxIF2.box()
+        bo.label(text="Match Name Operation");
         bo.operator("object.msarm", text="Match Armature bones", icon='OUTLINER_OB_ARMATURE')
         if context.scene.SKN == "":
            bo.label(text="No Armature bones to match.");
@@ -1129,7 +1154,8 @@ class VIEW3D_PT_MDPanel(Panel):
                 b2.label(text=bone);
         
         b1.operator("object.resetmerge", text="Reset merge", icon='WPAINT_HLT')
-        
+        b1.separator()
+        b1.operator("object.limitverts", text="Limit verts weights to 3 bones", icon='GROUP_BONE')
         
         
         
@@ -1450,7 +1476,13 @@ class OBJECT_OT_ClearArmatureName(bpy.types.Operator):
     def execute(self, context):
         context.scene.SKN = ""
         return {'FINISHED'}
-    
+class OBJECT_OT_Limit(bpy.types.Operator):
+    bl_idname = "object.limitverts"
+    bl_label = "Utility"
+    bl_description = "Limits all vert groups of a selected mesh to only allow 3 bones per vert"
+    def execute(self, context):
+        bpy.ops.object.vertex_group_limit_total(limit=3)
+        return {'FINISHED'}
     
     
 def register():
@@ -1469,7 +1501,7 @@ def register():
     bpy.utils.register_class(OBJECT_OT_SetArmature)
     bpy.utils.register_class(OBJECT_OT_ClearArmature)
     bpy.utils.register_class(OBJECT_OT_ApllyMo)
-    
+    bpy.utils.register_class(OBJECT_OT_Limit)
     
     bpy.utils.register_class(OBJECT_OT_SetArmatureToName)
     bpy.utils.register_class(OBJECT_OT_ClearArmatureName)
@@ -1521,6 +1553,11 @@ def register():
         description="Check this if you want to see the program output once you export the model, in case the file isn't working, etc..",
         default=False
     )
+    bpy.types.Scene.map = BoolProperty(
+        name="Is Map",
+        description="Check this if the model you want to export is actually a map model",
+        default=False
+    )
     
     bpy.types.Scene.headerInfo = bpy.props.StringProperty(
         name="",
@@ -1555,6 +1592,7 @@ def unregister():
     bpy.utils.unregister_class( OBJECT_OT_ApllyMo)
     bpy.utils.unregister_class(OBJECT_OT_SetArmatureToName)
     bpy.utils.unregister_class(OBJECT_OT_ClearArmatureName)
+    bpy.utils.unregister_class(OBJECT_OT_Limit)
     del bpy.types.Scene.show_warning
     del bpy.types.Scene.output
     del bpy.types.Scene.input
