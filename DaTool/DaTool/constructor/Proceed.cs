@@ -292,6 +292,30 @@ public static class Proceed
                     fs.Position = 12;
                     br.Write(p3);
                 }
+                if (tp == 5)
+                {
+                    List<uint> writeLater = new List<uint>();
+                    List<uint> adressesLater = new List<uint>();
+                    br.Write(5066053);
+                    br.Write(allFiles.Count);
+                    while (fs.Position % 16 != 0) br.Write((byte)0);
+                    for(int i = 0; i < allFiles.Count;i++)
+                    {
+                        writeLater.Add((uint)fs.Position);
+                        br.Write(0);
+                    }
+                    while (fs.Position % 16 != 0) br.Write((byte)0);
+                    for (int i = 0; i < allFiles.Count; i++)
+                    {
+                        adressesLater.Add((uint)fs.Position);
+                        br.Write(File.ReadAllBytes(allFiles[i]));
+                    }
+                    for (int i = 0; i < writeLater.Count; i++)
+                    {
+                        fs.Position = writeLater[i];
+                        br.Write(adressesLater[i]);
+                    }
+                }
             }
         }
         else
@@ -314,6 +338,7 @@ public static class Proceed
                     type = 2;
                 if (readValue(0, NumberType.UINT) == 4476229) type = 3;
                 if (readValue(0, NumberType.UINT) == 5064261) type = 4;
+                if (readValue(0, NumberType.UINT) == 5066053) type = 5;
                 Console.Write(type + ".");
                 Console.WriteLine();
                 Console.WriteLine("Gathering files...");
@@ -648,11 +673,31 @@ public static class Proceed
                     fs.Position = scr;
                     data.Add(("MD",br.ReadBytes((int)(tm3 - scr))));
 
-                    fs.Position = scr;
+                    fs.Position = tm3;
                     data.Add(("TM3", br.ReadBytes((int)(emm - tm3))));
 
-                    fs.Position = scr;
+                    fs.Position = emm;
                     data.Add(("EMM", br.ReadBytes((int)(fin - emm))));
+                }
+                if (type == 5)
+                {
+                    fs.Position = 4;
+                    uint sco = br.ReadUInt32();
+                    fs.Position = 16;
+                    List<uint> lst = new List<uint>();
+                    for(int i = 0; i < sco;i++)
+                    {
+                        lst.Add(br.ReadUInt32());
+                    }
+                    lst.Add((uint)fs.Length);
+                    lst.Sort((a, b) => a.CompareTo(b));
+
+
+                    for (int i = 0; i < lst.Count- 1; i++)
+                    {
+                        fs.Position = lst[i];
+                        data.Add(("MOT", br.ReadBytes((int)(lst[i+1] - fs.Position))));
+                    }
                 }
                 createFile(file, data.ToArray(), (byte)type);
             }
