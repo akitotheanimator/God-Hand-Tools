@@ -134,3 +134,34 @@ The best dat tool from this pack. Different from DAT Extractor, this one has the
   
 
 # if you need any help about my tools contact me in discord srnoobi#3108!
+
+
+# Blen2MOT 3.0
+
+Blen2mot, but with new functionalities.
+basically, this version is completely dependent and doesn't need the C# version of the program to be set up.
+and now, you can individually set the precision curves rather than having the precision property to be applied on ALL curves.
+
+![4](https://github.com/user-attachments/assets/e76ac0f3-50e3-4f79-a85d-c2ac89a47cea)
+
+You can also now set flags for the curves individually. And the foot rig is now toggled by selecting the bones.
+The ability to import HMOT's (although, HMOT export isn't currently available)
+some changes on the UI, etc...
+
+
+# Blen2SEQ
+
+## This tool wouldn't be possible without the help of *Roni Evil!*
+* Roni Evil's youtube: https://www.youtube.com/@ronievil
+
+Blen2SEQ is a SEQ event importer and exporter. You can use it to edit the events in your MOT animation! You can:
+* Manipulate the animation speed
+* Play sounds
+* Set special events
+* Spawn effects
+
+![bagnan](https://github.com/user-attachments/assets/c6b1b3d7-2f35-4414-984a-4e233762dd10)
+
+  
+
+# if you need any help about my tools contact me in discord srnoobi#3108!
