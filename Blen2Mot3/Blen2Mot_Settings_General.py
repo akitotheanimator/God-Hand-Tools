@@ -34,7 +34,7 @@ class VIEW3D_PT_MOTSettingsPanel(Panel):
     def draw(self, context):
         layout = self.layout
         scene = context.scene
-        tool = context.scene.property_MOT
+        tool = context.scene.properties_MOT
         obj = context.object
            
         split = layout.split(factor=0.5)
