@@ -78,9 +78,6 @@ some changes on the UI, etc...
 
 # Blen2SEQ
 
-## This tool wouldn't be possible without the help of *Roni Evil!*
-* Roni Evil's youtube: https://www.youtube.com/@ronievil
-
 Blen2SEQ is a SEQ event importer and exporter. You can use it to edit the events in your MOT animation! You can:
 * Manipulate the animation speed
 * Play sounds
