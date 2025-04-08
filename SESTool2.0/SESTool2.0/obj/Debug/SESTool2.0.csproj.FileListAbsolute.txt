@@ -1,7 +1,0 @@
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\bin\Debug\SESTool2.0.exe.config
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\bin\Debug\SESTool2.0.exe
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\bin\Debug\SESTool2.0.pdb
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\obj\Debug\SESTool2.0.csproj.AssemblyReference.cache
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\obj\Debug\SESTool2.0.csproj.CoreCompileInputs.cache
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\obj\Debug\SESTool2.0.exe
-C:\Users\matheus\source\repos\SESTool2.0\SESTool2.0\obj\Debug\SESTool2.0.pdb
