@@ -366,7 +366,7 @@ public static class Proceed
 
                         uint count = br.ReadUInt32();
 
-                        Console.WriteLine(count + " files has been found.\nExtracting...");
+                        Console.WriteLine((count+1) + " files has been found.\nExtracting...");
 
                         #region get file offsets.
                         List<uint> offsets = new List<uint>();
@@ -399,13 +399,22 @@ public static class Proceed
                         #endregion
                         for (int i = 0; i < liNam.Count - 1; i++)
                         {
+                            bool breaked = false;
                             fs.Position = liNam[i].Item1;
                             uint range = 0;
                             for (int g = 0; g < tmplst.Count; g++)
                             {
                                 if (tmplst[g].Item1 == liNam[i].Item1)
                                 {
-                                    range = tmplst[g+1].Item1;
+                                    try
+                                    {
+                                        range = tmplst[g + 1].Item1;
+                                    }
+                                    catch
+                                    {
+                                        breaked = true;
+                                        Console.WriteLine("The offset at index " + (g+1) + " does not exists, the file was not extracted.");
+                                    }
                                     break;
                                 }
                             }
@@ -417,6 +426,7 @@ public static class Proceed
                             if (liNam[i].Item1 == 0) bCount = 0;
 
                             //Console.WriteLine(liNam[i] + "    " + bCount);
+                            if (breaked == false)
                             data.Add((liNam[i].Item2, br.ReadBytes(bCount)));
                         }
 
