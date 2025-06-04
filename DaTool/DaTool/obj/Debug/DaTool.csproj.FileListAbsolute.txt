@@ -1,7 +1,0 @@
-C:\Users\mathe\source\repos\DaTool\DaTool\bin\Debug\DaTool.exe.config
-C:\Users\mathe\source\repos\DaTool\DaTool\bin\Debug\DaTool.exe
-C:\Users\mathe\source\repos\DaTool\DaTool\bin\Debug\DaTool.pdb
-C:\Users\mathe\source\repos\DaTool\DaTool\obj\Debug\DaTool.csproj.AssemblyReference.cache
-C:\Users\mathe\source\repos\DaTool\DaTool\obj\Debug\DaTool.csproj.CoreCompileInputs.cache
-C:\Users\mathe\source\repos\DaTool\DaTool\obj\Debug\DaTool.exe
-C:\Users\mathe\source\repos\DaTool\DaTool\obj\Debug\DaTool.pdb
