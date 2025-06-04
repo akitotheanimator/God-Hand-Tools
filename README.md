@@ -86,6 +86,8 @@ Blen2SEQ is a SEQ event importer and exporter. You can use it to edit the events
 
 ![bagnan](https://github.com/user-attachments/assets/c6b1b3d7-2f35-4414-984a-4e233762dd10)
 
+
+i've received a report of people stealling other person's contents. To the security of mod makers, the source of datool was deleted.
   
 
 # if you need any help about my tools contact me in discord srnoobi#3108!
