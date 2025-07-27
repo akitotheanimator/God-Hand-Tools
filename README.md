@@ -40,7 +40,7 @@ If there's a folder/file on the dat you want to repack and dont want the folder/
 ----------------------------
 
 
-# Blen2MD 1.0
+# Blen2MD 2.0
 *THIS TOOL WILL NOT BE UPDATED FOR SUPPORT OF NEWER BLENDER VERSIONS. THE SCRIPT WAS WRITTEN IN BLENDER 3.6 AND UNLESS I CHANGE MY MIND I WILL NOT MANTAIN UPDATES FOR FUTURE BLENDER VERSIONS.*
 
 
@@ -52,11 +52,8 @@ it is finally possible!
 
 ![ezgif-1-b0a17db52e](https://github.com/user-attachments/assets/ad621802-e48d-45f0-a2f4-baec1c40e807)
 
-The Texture Utility will require you to download a copy of imagemagick. I have implemented if for being a light source code program, besides it's free.
+ImageMagick support was removed due to low use.
 
-https://imagemagick.org/
-
->if you don't like using the texture utility or having to download imagemagick, texture indexing can also be done with other programs like GIMP.
 
 
 
